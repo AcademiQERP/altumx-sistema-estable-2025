@@ -1,0 +1,156 @@
+import { db } from "../db";
+import { debts, payments } from "@shared/schema";
+import { eq, desc, and, lt, not, isNull } from "drizzle-orm";
+
+export type ResumenFinanciero = {
+  totalPagado: number;
+  totalAdeudado: number;
+  porcentajeCumplimiento: number;
+  fechaUltimoPago: string | null;
+  adeudosVencidos: number;
+  estadoRiesgo: 'verde' | 'amarillo' | 'rojo';
+  balanceActual: number; // Positivo = saldo a favor, negativo = deuda
+  pagosNoAplicados: number; // Pagos que no están asociados a adeudos específicos
+};
+
+/**
+ * Calcula un resumen financiero completo para un alumno
+ * @param alumnoId ID del alumno
+ * @returns Objeto con métricas financieras y estado de riesgo
+ */
+export async function calcularResumenFinancieroAlumno(alumnoId: number): Promise<ResumenFinanciero> {
+  try {
+    console.log(`Calculando resumen financiero para alumno ID: ${alumnoId}`);
+
+    // Obtener todos los adeudos del alumno (pendientes, parciales y vencidos)
+    const adeudos = await db.select()
+      .from(debts)
+      .where(and(
+        eq(debts.alumnoId, alumnoId),
+        not(eq(debts.estatus, 'pagado')) // Considerar todos los adeudos excepto los completamente pagados
+      ));
+    
+    // Obtener todos los pagos válidos del alumno
+    const pagos = await db.select()
+      .from(payments)
+      .where(eq(payments.alumnoId, alumnoId))
+      .orderBy(desc(payments.fechaPago));
+    
+    // Calcular la fecha del último pago
+    const fechaUltimoPago = pagos.length > 0 ? 
+      (typeof pagos[0].fechaPago === 'string' ? pagos[0].fechaPago : new Date(pagos[0].fechaPago).toISOString()) 
+      : null;
+    
+    // Separar los pagos en aplicados y no aplicados
+    // Un pago no aplicado es aquel que no está asociado a ningún adeudo específico
+    // Nota: 'adeudoId' puede no existir en registros antiguos, así que usamos acceso seguro con '?.'
+    const pagosAplicados = pagos.filter(pago => (pago as any).adeudoId !== undefined && (pago as any).adeudoId !== null);
+    const pagosNoAplicados = pagos.filter(pago => (pago as any).adeudoId === undefined || (pago as any).adeudoId === null);
+    
+    // Calcular el total de pagos no aplicados (saldo a favor)
+    const totalPagosNoAplicados = pagosNoAplicados.reduce((sum, pago) => {
+      return sum + Number(pago.monto);
+    }, 0);
+    
+    // Calcular el total de pagos aplicados a adeudos
+    const totalPagosAplicados = pagosAplicados.reduce((sum, pago) => {
+      return sum + Number(pago.monto);
+    }, 0);
+    
+    // Total pagado (suma de todos los pagos)
+    const totalPagado = totalPagosNoAplicados + totalPagosAplicados;
+    
+    // Calcular el total adeudado (sumando todos los montos de adeudos pendientes)
+    const totalAdeudado = adeudos.reduce((sum, adeudo) => {
+      return sum + Number(adeudo.montoTotal);
+    }, 0);
+    
+    // Calculamos el total de pagos (aplicados + no aplicados)
+    const totalTodosPagos = totalPagado;
+    
+    // Calculamos el balance real: Total pagado menos total adeudado
+    // Si es positivo, hay saldo a favor; si es negativo, hay deuda
+    let balanceActual = totalTodosPagos - totalAdeudado;
+    
+    // El saldo a favor solo debe mostrarse si están cubiertos todos los adeudos
+    // Si hay adeudos pendientes, el balance debe reflejar la deuda
+    if (totalAdeudado > 0 && balanceActual > 0) {
+      // Hay adeudos pendientes pero también hay pagos no aplicados
+      // El balance debe ser negativo para indicar deuda, pero contabilizamos los pagos no aplicados
+      balanceActual = -totalAdeudado + totalPagosNoAplicados;
+    }
+    
+    // Calcular porcentaje de cumplimiento basado en el total adeudado y el total pagado
+    let porcentajeCumplimiento = 0;
+    
+    // Si hay adeudos pendientes, calculamos qué porcentaje ha sido cubierto
+    if (totalAdeudado > 0) {
+      // La fórmula debe considerar cuánto del total que debería haberse pagado ya se ha cubierto
+      const totalDeberia = totalAdeudado + totalPagosAplicados; // Total de obligaciones
+      porcentajeCumplimiento = Math.round((totalPagosAplicados / totalDeberia) * 100);
+    } else {
+      // Si no hay adeudos pendientes, el cumplimiento es del 100% solo si no hay pagos sin aplicar
+      // Si hay pagos sin aplicar pero no hay adeudos, probablemente hay un error o un pago anticipado
+      porcentajeCumplimiento = 100;
+    }
+    
+    // Calcular la cantidad de adeudos vencidos
+    const hoy = new Date();
+    const adeudosVencidos = adeudos.filter(adeudo => {
+      const fechaLimite = new Date(adeudo.fechaLimite);
+      return fechaLimite < hoy;
+    }).length;
+    
+    // Determinar el estado de riesgo: verde (al corriente), amarillo (con pagos pendientes), rojo (con adeudos vencidos)
+    let estadoRiesgo: 'verde' | 'amarillo' | 'rojo';
+    
+    if (totalAdeudado === 0 && totalPagosNoAplicados === 0) {
+      // No hay adeudos pendientes ni pagos sin aplicar - Al corriente
+      estadoRiesgo = 'verde';
+    } else if (totalAdeudado === 0 && totalPagosNoAplicados > 0) {
+      // No hay adeudos pero hay pagos sin aplicar - Revisar
+      estadoRiesgo = 'amarillo';
+    } else if (adeudosVencidos > 0) {
+      // Hay adeudos vencidos - Riesgo alto
+      estadoRiesgo = 'rojo';
+    } else if (totalAdeudado > 0) {
+      // Hay adeudos por vencer - Riesgo medio
+      estadoRiesgo = 'amarillo';
+    } else {
+      // Por defecto, estado verde
+      estadoRiesgo = 'verde';
+    }
+    
+    const resumen: ResumenFinanciero = {
+      totalPagado,
+      totalAdeudado,
+      porcentajeCumplimiento,
+      fechaUltimoPago,
+      adeudosVencidos,
+      estadoRiesgo,
+      balanceActual,
+      pagosNoAplicados: totalPagosNoAplicados
+    };
+    
+    console.log("Resumen financiero calculado:", resumen);
+    return resumen;
+  } catch (error) {
+    console.error("Error al calcular el resumen financiero:", error);
+    throw new Error(`Error al calcular el resumen financiero: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
+/**
+ * Evalúa el nivel de riesgo de pago basado en el estado financiero general
+ * @param adeudosVencidos Cantidad de adeudos vencidos
+ * @returns Estado de riesgo: verde (al corriente), amarillo (atención), rojo (riesgo)
+ */
+export function evaluarRiesgoPago(adeudosVencidos: number): 'verde' | 'amarillo' | 'rojo' {
+  if (adeudosVencidos === 0) {
+    return 'verde';
+  } else if (adeudosVencidos <= 2) {
+    return 'amarillo';
+  } else {
+    return 'rojo';
+  }
+}
