@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-gray-50 text-foreground;
+  }
+
+  /* Añadir bordes redondeados a elementos clave */
+  .card, 
+  .input,
+  .button,
+  .badge,
+  .select,
+  .textarea {
+    @apply rounded-xl shadow-sm transition-all duration-200;
+  }
+  
+  /* Aplicar sombras suaves a las tarjetas */
+  .card {
+    @apply shadow-[0_1px_4px_rgba(0,0,0,0.1)] hover:shadow-md;
+  }
+  
+  /* Aumentar bordes redondeados en botones */
+  .button {
+    @apply rounded-full;
+  }
+  
+  /* Estilos para tabs */
+  .tabs-list {
+    @apply p-1 bg-gray-100/50 rounded-2xl border border-gray-100;
+  }
+  
+  .tab-trigger {
+    @apply rounded-xl transition-all duration-300;
+  }
+}
+
+@layer components {
+  /* Estilos mejorados para dropdown y menús */
+  .dropdown-content {
+    @apply rounded-xl overflow-hidden shadow-lg border border-gray-100;
+  }
+  
+  /* Estilos para la navegación principal */
+  .main-nav {
+    @apply bg-white/80 backdrop-blur-sm shadow-sm;
+  }
+}

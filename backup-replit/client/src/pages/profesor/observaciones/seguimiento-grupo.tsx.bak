@@ -1,0 +1,1491 @@
+import { useState, useEffect, useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "wouter";
+import { useAuth } from "@/hooks/use-auth";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { 
+  LayoutGrid, 
+  ListFilter, 
+  BarChart as BarChartIcon, 
+  Table as TableIcon, 
+  AlertCircle, 
+  Loader2, 
+  CheckCircle, 
+  XCircle, 
+  Clock, 
+  Download,
+  FileText,
+  LineChart,
+  Filter,
+  Check,
+  FileWarning
+} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { EvaluacionDialog } from "@/components/observaciones/EvaluacionDialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+
+// Tipo para los filtros de generación de reportes
+type ReportFilters = {
+  soloEvaluacionCompleta: boolean;
+  requierenPlanRecuperacion: boolean;
+  noRequierenPlanRecuperacion: boolean;
+  promedioMinimo: number;
+};
+
+// Tipo para el resumen previo a la generación
+type ReportSummary = {
+  totalAlumnos: number;
+  totalBoletas: number;
+  totalPlanesRecuperacion: number;
+  promedioGeneral: number;
+  alumnosSeleccionados: Alumno[];
+};
+
+// Tipos para el seguimiento grupal
+type Alumno = {
+  id: number;
+  nombre: string;
+  grupoId: number;
+  grupoNombre: string;
+  nivel: string;
+  promedio: number;
+  estado: "completo" | "incompleto" | "sin_iniciar";
+  progreso: {
+    completados: number;
+    total: number;
+    porcentaje: number;
+  };
+  materias: {
+    id: number;
+    nombre: string;
+    promedio: number;
+  }[];
+};
+
+type DistribucionNivel = {
+  optimo: number;       // 90-100
+  satisfactorio: number; // 80-89
+  enProceso: number;     // 70-79
+  inicial: number;       // <70
+};
+
+type MateriaSeguimiento = {
+  id: number;
+  nombre: string;
+  promedio: number;
+  distribucion: DistribucionNivel;
+};
+
+type SeguimientoGrupal = {
+  totalAlumnos: number;
+  resumen: {
+    evaluacionCompleta: number;
+    evaluacionIncompleta: number;
+    sinIniciar: number;
+    totalSubtemas: number;
+  };
+  materias: MateriaSeguimiento[];
+  grupos: {
+    id: number;
+    nombre: string;
+    nivel: string;
+  }[];
+  alumnos: Alumno[];
+};
+
+// Componente principal
+export default function SeguimientoGrupoPage() {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [, navigate] = useLocation();
+  const { user } = useAuth();
+  
+  // Función para navegar a la vista detallada de un alumno
+  const verDetalleAlumno = (alumnoId: number) => {
+    navigate(`/profesor/seguimiento/alumno/${alumnoId}`);
+  };
+  const [filtros, setFiltros] = useState({
+    grupoId: "",
+    nivel: "",
+    periodo: "",
+    materiaId: "",
+    estadoEvaluacion: "" // Nuevo filtro para el estado de evaluación: "" | "completo" | "incompleto" | "sin_iniciar"
+  });
+  const [vistaActual, setVistaActual] = useState<"tabla" | "tarjetas">("tarjetas");
+  
+  // Estado para el diálogo de evaluación
+  const [evaluacionDialogOpen, setEvaluacionDialogOpen] = useState(false);
+  const [selectedAlumno, setSelectedAlumno] = useState<Alumno | null>(null);
+  
+  // Estados para el diálogo de filtros y resumen de reportes
+  const [showFilterDialog, setShowFilterDialog] = useState(false);
+  const [showSummaryDialog, setShowSummaryDialog] = useState(false);
+  const [reportFilters, setReportFilters] = useState<ReportFilters>({
+    soloEvaluacionCompleta: true,
+    requierenPlanRecuperacion: true,
+    noRequierenPlanRecuperacion: true,
+    promedioMinimo: 0
+  });
+  const [reportSummary, setReportSummary] = useState<ReportSummary | null>(null);
+
+  // Consulta para obtener los datos de seguimiento grupal
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["/api/academic-observer/seguimiento-grupo", filtros],
+    queryFn: async () => {
+      // Construimos los parámetros para la consulta, omitiendo los vacíos
+      const params = new URLSearchParams();
+      if (filtros.grupoId) params.append("grupoId", filtros.grupoId);
+      if (filtros.nivel) params.append("nivel", filtros.nivel);
+      if (filtros.periodo) params.append("periodo", filtros.periodo);
+      if (filtros.materiaId) params.append("materiaId", filtros.materiaId);
+
+      const url = `/api/academic-observer/seguimiento-grupo${
+        params.toString() ? `?${params.toString()}` : ""
+      }`;
+
+      const response = await apiRequest("GET", url);
+      if (!response.ok) {
+        throw new Error("Error al cargar los datos de seguimiento grupal");
+      }
+      return response.json() as Promise<SeguimientoGrupal>;
+    },
+  });
+
+  // Aplicar filtros y refrescar datos
+  const aplicarFiltros = () => {
+    refetch();
+  };
+
+  // Limpiar filtros
+  const limpiarFiltros = () => {
+    setFiltros({
+      grupoId: "",
+      nivel: "",
+      periodo: "",
+      materiaId: "",
+      estadoEvaluacion: "",
+    });
+    setTimeout(() => refetch(), 0);
+  };
+  
+  // Filtro de datos por estado de evaluación (implementado en cliente)
+  const alumnosFiltrados = useMemo(() => {
+    if (!data || !data.alumnos) return [];
+    
+    // Si no hay filtro de estado o es "all", devolvemos todos los alumnos
+    if (!filtros.estadoEvaluacion || filtros.estadoEvaluacion === "all") {
+      return data.alumnos;
+    }
+    
+    // Filtrar por estado de evaluación
+    return data.alumnos.filter(alumno => alumno.estado === filtros.estadoEvaluacion);
+  }, [data, filtros.estadoEvaluacion]);
+
+  // Datos para los gráficos
+  const datosPastel = (data && data.resumen)
+    ? [
+        { name: "Evaluación Completa", value: data.resumen?.evaluacionCompleta || 0, color: "#22c55e" },
+        { name: "Evaluación Incompleta", value: data.resumen?.evaluacionIncompleta || 0, color: "#f59e0b" },
+        { name: "Sin Iniciar", value: data.resumen?.sinIniciar || 0, color: "#ef4444" },
+      ]
+    : [];
+
+  // Función para obtener color según estado
+  const getColorEstado = (estado: string) => {
+    switch (estado) {
+      case "completo":
+        return "bg-green-100 text-green-800 hover:bg-green-200";
+      case "incompleto":
+        return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200";
+      case "sin_iniciar":
+        return "bg-red-100 text-red-800 hover:bg-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 hover:bg-gray-200";
+    }
+  };
+  
+  // Función para obtener el ícono según estado
+  const getIconoEstado = (estado: string) => {
+    switch (estado) {
+      case "completo":
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
+      case "incompleto":
+        return <Clock className="h-4 w-4 text-yellow-600" />;
+      case "sin_iniciar":
+        return <XCircle className="h-4 w-4 text-red-600" />;
+      default:
+        return null;
+    }
+  };
+  
+  // Función para obtener el color de la barra de progreso
+  const getColorProgreso = (porcentaje: number) => {
+    if (porcentaje >= 100) return "bg-green-500";
+    if (porcentaje >= 50) return "bg-yellow-500";
+    if (porcentaje > 0) return "bg-yellow-300";
+    return "bg-red-500";
+  };
+
+  // Funciones para manejar la exportación a PDF
+  const exportarReporteGrupal = async () => {
+    if (!data) return;
+    
+    try {
+      // Importar dinámicamente el servicio para evitar cargar jsPDF innecesariamente
+      const { generarReporteGrupalPDF } = await import('@/services/seguimiento-grupo-pdf');
+      
+      // Generar el PDF
+      const pdfDoc = generarReporteGrupalPDF(data);
+      
+      // Guardar el PDF
+      pdfDoc.save(`seguimiento-grupal-${new Date().toISOString().slice(0, 10)}.pdf`);
+      
+      toast({
+        title: "Reporte grupal generado",
+        description: "El reporte grupal ha sido exportado correctamente a PDF",
+      });
+    } catch (error) {
+      console.error("Error al generar el PDF del reporte grupal:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo generar el reporte grupal en PDF. Inténtelo de nuevo más tarde.",
+        variant: "destructive",
+      });
+    }
+  };
+  
+  const exportarInfografia = async () => {
+    if (!data) return;
+    
+    try {
+      // Importar dinámicamente el servicio para evitar cargar jsPDF innecesariamente
+      const { generarInfograficoPDF } = await import('@/services/seguimiento-grupo-pdf');
+      
+      // Generar el PDF con la infografía
+      const pdfDoc = generarInfograficoPDF(data);
+      
+      // Guardar el PDF
+      pdfDoc.save(`infografia-seguimiento-${new Date().toISOString().slice(0, 10)}.pdf`);
+      
+      toast({
+        title: "Infografía generada",
+        description: "La infografía ha sido exportada correctamente a PDF",
+      });
+    } catch (error) {
+      console.error("Error al generar la infografía en PDF:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo generar la infografía en PDF. Inténtelo de nuevo más tarde.",
+        variant: "destructive",
+      });
+    }
+  };
+  
+  const exportarReporteIndividual = async (alumno: Alumno) => {
+    if (!alumno) return;
+    
+    try {
+      // Importar dinámicamente el servicio para evitar cargar jsPDF innecesariamente
+      const { generarReporteIndividualPDF } = await import('@/services/seguimiento-grupo-pdf');
+      
+      // Generar el PDF individual
+      const pdfDoc = generarReporteIndividualPDF(alumno);
+      
+      // Guardar el PDF
+      pdfDoc.save(`reporte-${alumno.nombre.replace(/\s+/g, '-')}-${new Date().toISOString().slice(0, 10)}.pdf`);
+      
+      toast({
+        title: "Reporte individual generado",
+        description: `El reporte de ${alumno.nombre} ha sido exportado correctamente a PDF`,
+      });
+    } catch (error) {
+      console.error("Error al generar el PDF del reporte individual:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo generar el reporte individual en PDF. Inténtelo de nuevo más tarde.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Función para mostrar el diálogo de filtros previo a la generación de reportes
+  const generarReportesMasivos = () => {
+    if (!data || !data.alumnos || data.alumnos.length === 0) {
+      toast({
+        title: "Sin datos",
+        description: "No hay alumnos disponibles para generar reportes.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Verificar que haya alumnos con evaluación completa
+    const alumnosCompletos = data.alumnos.filter(a => a.estado === "completo");
+    if (alumnosCompletos.length === 0) {
+      toast({
+        title: "Sin evaluaciones completas",
+        description: "No hay alumnos con evaluación completa para generar reportes.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Mostrar el diálogo de filtros
+    setShowFilterDialog(true);
+  };
+  
+  // Función para calcular el resumen de reportes basado en los filtros aplicados
+  const calcularResumenReportes = () => {
+    if (!data || !data.alumnos || data.alumnos.length === 0) return null;
+    
+    // Aplicar filtros
+    let alumnosFiltrados = [...data.alumnos];
+    
+    // 1. Filtrar por evaluación completa
+    if (reportFilters.soloEvaluacionCompleta) {
+      alumnosFiltrados = alumnosFiltrados.filter(a => a.estado === "completo");
+    }
+    
+    // 2. Filtrar por promedio mínimo
+    if (reportFilters.promedioMinimo > 0) {
+      alumnosFiltrados = alumnosFiltrados.filter(a => a.promedio >= reportFilters.promedioMinimo);
+    }
+    
+    // 3. Filtrar por planes de recuperación
+    const alumnosConPlanRecuperacion = alumnosFiltrados.filter(a => 
+      a.materias.some(m => m.promedio < 7.0)
+    );
+    
+    const alumnosSinPlanRecuperacion = alumnosFiltrados.filter(a => 
+      !a.materias.some(m => m.promedio < 7.0)
+    );
+    
+    let alumnosSeleccionados = [];
+    
+    if (reportFilters.requierenPlanRecuperacion && reportFilters.noRequierenPlanRecuperacion) {
+      alumnosSeleccionados = [...alumnosFiltrados];
+    } else if (reportFilters.requierenPlanRecuperacion) {
+      alumnosSeleccionados = [...alumnosConPlanRecuperacion];
+    } else if (reportFilters.noRequierenPlanRecuperacion) {
+      alumnosSeleccionados = [...alumnosSinPlanRecuperacion];
+    }
+    
+    // 4. Filtrar alumnos de prueba (ID > 5)
+    alumnosSeleccionados = alumnosSeleccionados.filter(a => a.id <= 5);
+    
+    // Calcular el promedio general
+    const promedioGeneral = alumnosSeleccionados.length > 0 
+      ? alumnosSeleccionados.reduce((sum, a) => sum + a.promedio, 0) / alumnosSeleccionados.length 
+      : 0;
+    
+    // Generar el resumen
+    return {
+      totalAlumnos: alumnosSeleccionados.length,
+      totalBoletas: alumnosSeleccionados.length,
+      totalPlanesRecuperacion: alumnosSeleccionados.filter(a => 
+        a.materias.some(m => m.promedio < 7.0)
+      ).length,
+      promedioGeneral,
+      alumnosSeleccionados
+    };
+  };
+  
+  // Función para confirmar los filtros y mostrar el resumen
+  const confirmarFiltros = () => {
+    const resumen = calcularResumenReportes();
+    if (!resumen || resumen.totalAlumnos === 0) {
+      toast({
+        title: "Sin resultados",
+        description: "No hay alumnos que cumplan con los filtros seleccionados.",
+        variant: "destructive"
+      });
+      setShowFilterDialog(false);
+      return;
+    }
+    
+    setReportSummary(resumen);
+    setShowFilterDialog(false);
+    setShowSummaryDialog(true);
+  };
+
+      // Importar dinámicamente JSZip si es necesario
+      const { default: JSZip } = await import('jszip');
+
+      const zip = new JSZip();
+      let reportesGenerados = 0;
+      let reportesOmitidos = 0;
+      let errores = [];
+
+      // Crear una carpeta para las boletas y otra para los planes de recuperación
+      const carpetaBoletas = zip.folder("boletas_academicas") || zip;
+      const carpetaPlanes = zip.folder("planes_recuperacion") || zip;
+
+      // Identificar el nombre del grupo actual
+      const grupoActual = filtros.grupoId && data.grupos 
+        ? data.grupos.find(g => g.id.toString() === filtros.grupoId) 
+        : null;
+      const nombreGrupo = grupoActual?.nombre || "todos";
+      
+      // Para cada alumno con evaluación completa
+      for (const alumno of alumnosCompletos) {
+        try {
+          // Omitir estudiantes de prueba (ID > 5)
+          if (alumno.id > 5) {
+            reportesOmitidos++;
+            console.log(`Alumno ID ${alumno.id} (${alumno.nombre}) omitido por ser un estudiante de prueba`);
+            continue;
+          }
+
+          // Mostrar progreso
+          toast({
+            title: "Preparando reportes...",
+            description: `Procesando ${reportesGenerados + 1} de ${alumnosCompletos.length}: ${alumno.nombre}`
+          });
+
+          // 1. Generar la boleta académica
+          try {
+            // En lugar de generar el PDF aquí, creamos un enlace directo a la boleta
+            const nombreArchivoLimpio = alumno.nombre.replace(/\s+/g, '-');
+            
+            // Crear un enlace a la boleta que se generará al hacer clic
+            const enlaceBoleta = `/report-cards/${alumno.id}`;
+            const contenidoEnlace = `
+-----------------------------------------
+BOLETA ACADÉMICA: ${alumno.nombre}
+-----------------------------------------
+Promedio general: ${alumno.promedio.toFixed(1)}
+Grupo: ${nombreGrupo}
+
+Para ver e imprimir la boleta completa, visite:
+${window.location.origin}${enlaceBoleta}
+
+Documento generado el: ${new Date().toLocaleDateString('es-MX')}
+-----------------------------------------`;
+
+            carpetaBoletas.file(
+              `Boleta_${nombreArchivoLimpio}.txt`, 
+              contenidoEnlace
+            );
+              
+            // Incrementar contador de éxito
+            console.log(`Boleta enlazada para ${alumno.nombre}`);
+          } catch (error) {
+            console.error(`Error al procesar boleta para ${alumno.nombre}:`, error);
+          }
+
+          // 2. Generar el plan de recuperación si el alumno tiene materias con calificación < 7.0
+          const materiasBajo7 = alumno.materias.filter(m => m.promedio < 7.0);
+          if (materiasBajo7.length > 0) {
+            try {
+              // En lugar de generar el PDF aquí, creamos un enlace directo al plan
+              const nombreArchivoLimpio = alumno.nombre.replace(/\s+/g, '-');
+              
+              // Crear un enlace al plan que se generará al hacer clic
+              const enlacePlan = `/teacher/plan-recuperacion?studentId=${alumno.id}`;
+              const contenidoPlan = `
+-----------------------------------------
+PLAN DE RECUPERACIÓN: ${alumno.nombre}
+-----------------------------------------
+Materias que requieren recuperación:
+${materiasBajo7.map(m => `- ${m.nombre}: ${m.promedio.toFixed(1)}`).join('\n')}
+
+Para ver e imprimir el plan de recuperación completo, visite:
+${window.location.origin}${enlacePlan}
+
+Documento generado el: ${new Date().toLocaleDateString('es-MX')}
+-----------------------------------------`;
+
+              carpetaPlanes.file(
+                `PlanRecuperacion_${nombreArchivoLimpio}.txt`, 
+                contenidoPlan
+              );
+              
+              console.log(`Plan de recuperación enlazado para ${alumno.nombre}`);
+            } catch (error) {
+              console.error(`Error al procesar plan de recuperación para ${alumno.nombre}:`, error);
+            }
+          }
+
+          reportesGenerados++;
+        } catch (error) {
+          console.error(`Error al generar reportes para el alumno ${alumno.nombre}:`, error);
+          errores.push(alumno.nombre);
+          reportesOmitidos++;
+        }
+      }
+
+      // Añadir un archivo README con instrucciones
+      
+      // Archivo README en texto plano
+      zip.file("README.txt", 
+        `ÍNDICE DE REPORTES DEL GRUPO ${nombreGrupo}
+-------------------------------------------
+
+Este archivo ZIP contiene enlaces para acceder a las boletas académicas y planes de recuperación
+de los alumnos del grupo ${nombreGrupo}. Para acceder a cada documento, abra los archivos .txt
+y visite los enlaces correspondientes desde el navegador cuando esté conectado al sistema.
+
+También puede abrir el archivo index.html incluido para navegar por todos los reportes.
+
+Fecha de generación: ${new Date().toLocaleDateString('es-MX', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })}
+
+Reportes generados: ${reportesGenerados}
+Reportes omitidos: ${reportesOmitidos}
+
+Para cualquier duda, contacte al administrador del sistema.`
+      );
+      
+      // Crear un índice HTML más interactivo
+      const fechaGeneracion = new Date().toLocaleDateString('es-MX', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
+      // Crear listas de enlaces para el HTML
+      const listaEnlacesBoletas = alumnosCompletos
+        .filter(alumno => alumno.id <= 5) // Filtrar alumnos de prueba
+        .map(alumno => `<li><a href="/report-cards/${alumno.id}" target="_blank">${alumno.nombre} (Promedio: ${alumno.promedio.toFixed(1)})</a></li>`)
+        .join('');
+      
+      const listaEnlacesPlanes = alumnosCompletos
+        .filter(alumno => alumno.id <= 5) // Filtrar alumnos de prueba
+        .filter(alumno => alumno.materias.some(m => m.promedio < 7.0))
+        .map(alumno => {
+          const materiasBajo7 = alumno.materias.filter(m => m.promedio < 7.0);
+          return `<li>
+            <a href="/teacher/plan-recuperacion?studentId=${alumno.id}" target="_blank">${alumno.nombre}</a>
+            <span class="materias">${materiasBajo7.map(m => m.nombre).join(', ')}</span>
+          </li>`;
+        })
+        .join('');
+      
+      // Generar archivo HTML de índice
+      zip.file("index.html", `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes del Grupo ${nombreGrupo}</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+    h1 { color: #1F3C88; border-bottom: 2px solid #1F3C88; padding-bottom: 10px; }
+    .info { background-color: #f0f4ff; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+    .warning { background-color: #fff4e5; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+    h2 { color: #333; margin-top: 30px; }
+    ul { list-style-type: none; padding-left: 0; }
+    li { margin-bottom: 8px; padding: 8px; border-bottom: 1px solid #eee; }
+    li:hover { background-color: #f9f9f9; }
+    a { color: #1F3C88; text-decoration: none; font-weight: bold; }
+    a:hover { text-decoration: underline; }
+    .materias { font-size: 0.85em; color: #666; margin-left: 10px; display: block; margin-top: 3px; }
+    .footer { margin-top: 40px; font-size: 0.9em; color: #666; border-top: 1px solid #ddd; padding-top: 10px; }
+    .button-link { display: inline-block; background-color: #1F3C88; color: white; padding: 8px 16px; 
+      border-radius: 4px; text-decoration: none; margin-top: 5px; }
+    .button-link:hover { background-color: #14295e; color: white; text-decoration: none; }
+    @media print { 
+      .warning, .button-link { display: none; } 
+      body { font-size: 11pt; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Reportes del Grupo ${nombreGrupo}</h1>
+  
+  <div class="info">
+    <p><strong>Fecha de generación:</strong> ${fechaGeneracion}</p>
+    <p><strong>Reportes generados:</strong> ${reportesGenerados}</p>
+    <p><strong>Reportes omitidos:</strong> ${reportesOmitidos}</p>
+  </div>
+  
+  <div class="warning">
+    <p><strong>Importante:</strong> Para acceder a estos reportes, debe estar conectado al sistema. 
+    Al hacer clic en los enlaces, se abrirá cada documento en una nueva pestaña.</p>
+  </div>
+  
+  <h2>Boletas Académicas</h2>
+  <ul>
+    ${listaEnlacesBoletas}
+  </ul>
+  
+  <h2>Planes de Recuperación</h2>
+  ${listaEnlacesPlanes ? `<ul>${listaEnlacesPlanes}</ul>` : '<p>No hay alumnos que requieran plan de recuperación.</p>'}
+  
+  <div class="footer">
+    <p>Documento generado por el sistema de gestión académica Altum Educación.</p>
+    <a href="javascript:window.print()" class="button-link">Imprimir este índice</a>
+  </div>
+</body>
+</html>
+      `);
+      
+      // Si se generaron reportes, crear el archivo ZIP
+      if (reportesGenerados > 0) {
+        // Generar el archivo ZIP
+        const content = await zip.generateAsync({ type: "blob" });
+
+        // Crear enlace de descarga
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(content);
+        link.download = `reportes_grupo_${nombreGrupo}_${new Date().toISOString().slice(0, 10)}.zip`;
+        link.click();
+
+        // Mostrar resumen
+        toast({
+          title: "Reportes generados correctamente",
+          description: `Se generaron ${reportesGenerados} reportes y enlaces. Se omitieron ${reportesOmitidos} alumnos de prueba.`,
+          // Usar default para mensaje de éxito
+          variant: "default"
+        });
+        
+        // Liberar memoria del objeto URL después de la descarga
+        setTimeout(() => {
+          URL.revokeObjectURL(link.href);
+        }, 1000);
+      } else {
+        toast({
+          title: "No se generaron reportes",
+          description: "No hay alumnos válidos para generar reportes. Intente seleccionar otro grupo.",
+          variant: "destructive"
+        });
+      }
+
+      // Si hubo errores, mostrarlos
+      if (errores.length > 0) {
+        toast({
+          title: "Advertencia",
+          description: `No se pudieron generar reportes para ${errores.length} alumnos.`,
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error("Error al generar reportes masivos:", error);
+      toast({
+        title: "Error",
+        description: "Ocurrió un error al generar los reportes masivos. Por favor, intente de nuevo.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  return (
+    <>
+      <div className="container py-6 space-y-6">
+        <div className="flex flex-col space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight">Panel de Seguimiento Grupal</h1>
+          <p className="text-muted-foreground">
+            Visualiza y analiza el progreso académico de tus grupos y alumnos
+          </p>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <CardTitle>Filtros de búsqueda</CardTitle>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setVistaActual("tabla")}
+                  className={vistaActual === "tabla" ? "bg-primary/10" : ""}
+                >
+                  <TableIcon className="h-4 w-4 mr-2" />
+                  Tabla
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setVistaActual("tarjetas")}
+                  className={vistaActual === "tarjetas" ? "bg-primary/10" : ""}
+                >
+                  <LayoutGrid className="h-4 w-4 mr-2" />
+                  Tarjetas
+                </Button>
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <Download className="h-4 w-4 mr-2" />
+                      Exportar
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={exportarReporteGrupal}>
+                      <FileText className="h-4 w-4 mr-2" />
+                      Reporte PDF Grupal
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={exportarInfografia}>
+                      <LineChart className="h-4 w-4 mr-2" />
+                      Infografía PDF
+                    </DropdownMenuItem>
+                    
+                    {/* Añadir elemento para generación masiva de reportes - solo visible para roles autorizados */}
+                    {user && (user.rol === "docente" || user.rol === "admin") && (
+                      <DropdownMenuItem 
+                        onClick={generarReportesMasivos}
+                        disabled={data?.resumen?.evaluacionCompleta === 0}
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        📥 Generar reportes del grupo
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {/* Filtros rápidos por estado */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className={!filtros.estadoEvaluacion || filtros.estadoEvaluacion === "all" ? "bg-primary/10" : ""}
+                onClick={() => {
+                  setFiltros({...filtros, estadoEvaluacion: "all"});
+                  refetch();
+                }}
+              >
+                <span className="flex items-center">
+                  Todos <span className="ml-1">({data?.totalAlumnos || 0})</span>
+                </span>
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className={filtros.estadoEvaluacion === "completo" ? "bg-primary/10" : ""}
+                onClick={() => {
+                  setFiltros({...filtros, estadoEvaluacion: "completo"});
+                  refetch();
+                }}
+              >
+                <span className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-green-500 mr-1" />
+                  Completos <span className="ml-1">({data?.resumen?.evaluacionCompleta || 0})</span>
+                </span>
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className={filtros.estadoEvaluacion === "incompleto" ? "bg-primary/10" : ""}
+                onClick={() => {
+                  setFiltros({...filtros, estadoEvaluacion: "incompleto"});
+                  refetch();
+                }}
+              >
+                <span className="flex items-center">
+                  <Clock className="h-4 w-4 text-amber-500 mr-1" />
+                  Incompletos <span className="ml-1">({data?.resumen?.evaluacionIncompleta || 0})</span>
+                </span>
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className={filtros.estadoEvaluacion === "sin_iniciar" ? "bg-primary/10" : ""}
+                onClick={() => {
+                  setFiltros({...filtros, estadoEvaluacion: "sin_iniciar"});
+                  refetch();
+                }}
+              >
+                <span className="flex items-center">
+                  <XCircle className="h-4 w-4 text-red-500 mr-1" />
+                  Sin iniciar <span className="ml-1">({data?.resumen?.sinIniciar || 0})</span>
+                </span>
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <label className="text-sm font-medium mb-1 block">Grupo</label>
+                <Select 
+                  value={filtros.grupoId} 
+                  onValueChange={(value) => setFiltros({...filtros, grupoId: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar grupo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos los grupos</SelectItem>
+                    {data?.grupos?.map((grupo) => (
+                      <SelectItem key={grupo.id} value={grupo.id.toString()}>
+                        {grupo.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-1 block">Nivel</label>
+                <Select 
+                  value={filtros.nivel} 
+                  onValueChange={(value) => setFiltros({...filtros, nivel: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar nivel" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos los niveles</SelectItem>
+                    <SelectItem value="Preparatoria">Preparatoria</SelectItem>
+                    <SelectItem value="Secundaria">Secundaria</SelectItem>
+                    <SelectItem value="Primaria">Primaria</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-1 block">Periodo</label>
+                <Select 
+                  value={filtros.periodo} 
+                  onValueChange={(value) => setFiltros({...filtros, periodo: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar periodo" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos los periodos</SelectItem>
+                    <SelectItem value="1er_bimestre">1er Bimestre</SelectItem>
+                    <SelectItem value="2do_bimestre">2do Bimestre</SelectItem>
+                    <SelectItem value="3er_bimestre">3er Bimestre</SelectItem>
+                    <SelectItem value="4to_bimestre">4to Bimestre</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-1 block">Materia</label>
+                <Select 
+                  value={filtros.materiaId} 
+                  onValueChange={(value) => setFiltros({...filtros, materiaId: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar materia" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todas las materias</SelectItem>
+                    <SelectItem value="1">Matemáticas</SelectItem>
+                    <SelectItem value="2">Español</SelectItem>
+                    <SelectItem value="3">Ciencias Naturales</SelectItem>
+                    <SelectItem value="4">Historia</SelectItem>
+                    <SelectItem value="5">Inglés</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-1 block">Estado de Evaluación</label>
+                <Select 
+                  value={filtros.estadoEvaluacion}
+                  onValueChange={(value) => setFiltros({...filtros, estadoEvaluacion: value})}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Todos los estados" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos los estados ({data?.totalAlumnos || 0})</SelectItem>
+                    <SelectItem value="completo">
+                      <div className="flex items-center">
+                        <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+                        Evaluación completa ({data?.resumen?.evaluacionCompleta || 0})
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="incompleto">
+                      <div className="flex items-center">
+                        <Clock className="h-4 w-4 text-amber-500 mr-2" />
+                        Evaluación incompleta ({data?.resumen?.evaluacionIncompleta || 0})
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="sin_iniciar">
+                      <div className="flex items-center">
+                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                        Sin iniciar ({data?.resumen?.sinIniciar || 0})
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2 mt-4">
+              <Button variant="outline" onClick={limpiarFiltros}>
+                Limpiar
+              </Button>
+              <Button onClick={aplicarFiltros}>
+                <ListFilter className="h-4 w-4 mr-2" />
+                Aplicar filtros
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {isLoading ? (
+          <div className="flex justify-center items-center h-60">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            <span className="ml-2 text-lg">Cargando datos...</span>
+          </div>
+        ) : isError ? (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+              No se pudieron cargar los datos. Por favor, intenta de nuevo más tarde.
+            </AlertDescription>
+          </Alert>
+        ) : (
+          <>
+            {/* Sección de resumen */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Card className="border-l-4 border-l-green-500">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    <CardTitle className="text-lg">Evaluación completa</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold">{data?.resumen?.evaluacionCompleta || 0}</div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    {data && data.totalAlumnos > 0 && data.resumen
+                      ? `${Math.round(((data.resumen?.evaluacionCompleta || 0) / data.totalAlumnos) * 100)}% del total`
+                      : "0% del total"}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-l-4 border-l-yellow-500">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center">
+                    <Clock className="h-5 w-5 text-yellow-500 mr-2" />
+                    <CardTitle className="text-lg">Evaluación incompleta</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold">{data?.resumen?.evaluacionIncompleta || 0}</div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    {data && data.totalAlumnos > 0 && data.resumen
+                      ? `${Math.round(((data.resumen?.evaluacionIncompleta || 0) / data.totalAlumnos) * 100)}% del total`
+                      : "0% del total"}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-l-4 border-l-red-500">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center">
+                    <XCircle className="h-5 w-5 text-red-500 mr-2" />
+                    <CardTitle className="text-lg">Sin iniciar</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold">{data?.resumen?.sinIniciar || 0}</div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    {data && data.totalAlumnos > 0 && data.resumen
+                      ? `${Math.round(((data.resumen?.sinIniciar || 0) / data.totalAlumnos) * 100)}% del total`
+                      : "0% del total"}
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="border-l-4 border-l-blue-500">
+                <CardHeader className="pb-2">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <BarChartIcon className="h-5 w-5 text-blue-500 mr-2" />
+                      <CardTitle className="text-lg">Progreso general</CardTitle>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm">Total:</span>
+                      <span className="text-sm font-medium">
+                        {(data?.resumen?.evaluacionCompleta || 0) + (data?.resumen?.evaluacionIncompleta || 0)} / {data?.totalAlumnos || 0}
+                      </span>
+                    </div>
+                    <Progress 
+                      value={data && data.totalAlumnos > 0 && data.resumen
+                        ? Math.round((((data.resumen.evaluacionCompleta || 0) + (data.resumen.evaluacionIncompleta || 0)) / data.totalAlumnos) * 100)
+                        : 0
+                      } 
+                      className="h-2 mb-3"
+                    />
+                    {datosPastel.length > 0 && (
+                      <div className="w-full h-24">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={datosPastel}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={25}
+                              outerRadius={40}
+                              paddingAngle={2}
+                              dataKey="value"
+                            >
+                              {datosPastel.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                              ))}
+                            </Pie>
+                            <Tooltip formatter={(value) => [`${value} alumnos`, '']} />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Sección de métricas por materia */}
+              <Card className="col-span-1 md:col-span-2">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BarChartIcon className="h-5 w-5 mr-2 text-primary" />
+                    Métricas por Materia
+                  </CardTitle>
+                  <CardDescription>
+                    Análisis comparativo del desempeño por materia
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {isLoading ? (
+                    <div className="h-[300px] flex justify-center items-center">
+                      <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                    </div>
+                  ) : isError ? (
+                    <Alert variant="destructive">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertTitle>Error</AlertTitle>
+                      <AlertDescription>
+                        No se pudieron cargar las métricas por materia.
+                      </AlertDescription>
+                    </Alert>
+                  ) : (
+                    <div>
+                      <Tabs defaultValue="promedio">
+                        <TabsList className="mb-4">
+                          <TabsTrigger value="promedio">Promedio General</TabsTrigger>
+                          <TabsTrigger value="distribucion">Niveles de Logro</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="promedio" className="space-y-4">
+                          <div className="h-[300px]">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart
+                                data={data?.materias?.map(materia => ({
+                                  nombre: materia.nombre,
+                                  promedio: materia.promedio
+                                }))}
+                                margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                              >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis 
+                                  dataKey="nombre" 
+                                  angle={-45} 
+                                  textAnchor="end" 
+                                  height={70}
+                                  interval={0}
+                                />
+                                <YAxis domain={[0, 100]} tickFormatter={(value) => (value / 10).toFixed(1)} />
+                                <Tooltip 
+                                  formatter={(value: any) => [typeof value === 'number' ? (value / 10).toFixed(1) : value, 'Promedio']}
+                                />
+                                <Bar 
+                                  dataKey="promedio" 
+                                  fill="#8884d8" 
+                                  name="Promedio"
+                                  isAnimationActive={true}
+                                  animationDuration={800}
+                                >
+                                  {data?.materias?.map((materia, index) => (
+                                    <Cell 
+                                      key={`cell-${index}`} 
+                                      fill={materia.promedio >= 9.0 * 10
+                                        ? "#22c55e" 
+                                        : materia.promedio >= 8.0 * 10
+                                          ? "#3b82f6" 
+                                          : materia.promedio >= 7.0 * 10
+                                            ? "#f59e0b" 
+                                            : "#ef4444"
+                                      } 
+                                    />
+                                  ))}
+                                </Bar>
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </TabsContent>
+                        <TabsContent value="distribucion" className="space-y-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {data?.materias?.map((materia) => (
+                              <div key={materia.id} className="border rounded-lg p-4">
+                                <h4 className="font-medium mb-2">{materia.nombre}</h4>
+                                <div className="flex justify-between text-sm mb-1">
+                                  <span>Óptimo (90-100)</span>
+                                  <span className="font-medium">{materia.distribucion.optimo}</span>
+                                </div>
+                                <Progress
+                                  value={(materia.distribucion.optimo / data.totalAlumnos) * 100}
+                                  className="h-2 mb-2 bg-gray-100"
+                                  indicatorClassName="bg-green-500"
+                                />
+                                
+                                <div className="flex justify-between text-sm mb-1">
+                                  <span>Satisfactorio (80-89)</span>
+                                  <span className="font-medium">{materia.distribucion.satisfactorio}</span>
+                                </div>
+                                <Progress
+                                  value={(materia.distribucion.satisfactorio / data.totalAlumnos) * 100}
+                                  className="h-2 mb-2 bg-gray-100"
+                                  indicatorClassName="bg-blue-500"
+                                />
+                                
+                                <div className="flex justify-between text-sm mb-1">
+                                  <span>En proceso (70-79)</span>
+                                  <span className="font-medium">{materia.distribucion.enProceso}</span>
+                                </div>
+                                <Progress
+                                  value={(materia.distribucion.enProceso / data.totalAlumnos) * 100}
+                                  className="h-2 mb-2 bg-gray-100"
+                                  indicatorClassName="bg-yellow-500"
+                                />
+                                
+                                <div className="flex justify-between text-sm mb-1">
+                                  <span>Inicial (&lt; 70)</span>
+                                  <span className="font-medium">{materia.distribucion.inicial}</span>
+                                </div>
+                                <Progress
+                                  value={(materia.distribucion.inicial / data.totalAlumnos) * 100}
+                                  className="h-2 mb-2 bg-gray-100"
+                                  indicatorClassName="bg-red-500"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </TabsContent>
+                      </Tabs>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sección de alumnos */}
+            <Card>
+              <CardHeader>
+                <div className="flex flex-col md:flex-row justify-between">
+                  <div>
+                    <CardTitle>Lista de alumnos ({alumnosFiltrados.length || 0})</CardTitle>
+                    <CardDescription>
+                      {filtros.estadoEvaluacion ? (
+                        <div className="flex items-center gap-1">
+                          {filtros.estadoEvaluacion === "completo" && <CheckCircle className="h-4 w-4 text-green-500" />}
+                          {filtros.estadoEvaluacion === "incompleto" && <Clock className="h-4 w-4 text-amber-500" />}
+                          {filtros.estadoEvaluacion === "sin_iniciar" && <XCircle className="h-4 w-4 text-red-500" />}
+                          <span>
+                            Filtrado por estado: {
+                              filtros.estadoEvaluacion === "completo" ? "Evaluación completa" :
+                              filtros.estadoEvaluacion === "incompleto" ? "Evaluación incompleta" :
+                              "Sin iniciar"
+                            } ({alumnosFiltrados.length} de {data?.alumnos?.length || 0} alumnos)
+                          </span>
+                        </div>
+                      ) : (
+                        filtros.grupoId
+                          ? `Mostrando alumnos del grupo ${
+                              data?.grupos?.find((g) => g.id.toString() === filtros.grupoId)?.nombre || ""
+                            }`
+                          : "Mostrando todos los alumnos"
+                      )}
+                    </CardDescription>
+                  </div>
+                  <Button className="mt-4 md:mt-0" variant="outline" onClick={() => {
+                    // Generar un archivo CSV con los datos
+                    if (!data) return;
+                    
+                    // Preparar las cabeceras del CSV
+                    let csvContent = "ID,Nombre,Grupo,Nivel,Promedio,Estado,Subtemas Completados,Total Subtemas,Porcentaje\n";
+                    
+                    // Agregar cada alumno (respetando los filtros aplicados)
+                    if (alumnosFiltrados.length > 0) {
+                      alumnosFiltrados.forEach(alumno => {
+                        const estadoTexto = 
+                          alumno.estado === "completo" ? "Completo" : 
+                          alumno.estado === "incompleto" ? "Incompleto" : 
+                          "Sin iniciar";
+                        
+                        csvContent += `${alumno.id},"${alumno.nombre}","${alumno.grupoNombre}","${alumno.nivel}",`;
+                        csvContent += `${(alumno.promedio / 10).toFixed(1)},"${estadoTexto}",${alumno.progreso.completados},`;
+                        csvContent += `${alumno.progreso.total},${alumno.progreso.porcentaje}\n`;
+                      });
+                    }
+                    
+                    // Crear un objeto Blob con el contenido CSV
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    
+                    // Crear una URL para el Blob
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Crear un enlace y hacer clic en él para descargar el archivo
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', `seguimiento-grupal-${new Date().toISOString().slice(0,10)}.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    // Limpiar
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                    
+                    toast({
+                      title: "Exportación completada",
+                      description: "Los datos han sido exportados correctamente a CSV",
+                    });
+                  }}>
+                    <Download className="h-4 w-4 mr-2" />
+                    Exportar datos
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {vistaActual === "tabla" ? (
+                  <div className="rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Nombre</TableHead>
+                          <TableHead>Grupo</TableHead>
+                          <TableHead>Promedio</TableHead>
+                          <TableHead>Estado</TableHead>
+                          <TableHead>Acciones</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {alumnosFiltrados.map((alumno) => (
+                          <TableRow key={alumno.id}>
+                            <TableCell className="font-medium">{alumno.nombre}</TableCell>
+                            <TableCell>{alumno.grupoNombre}</TableCell>
+                            <TableCell>{(alumno.promedio / 10).toFixed(1)}</TableCell>
+                            <TableCell>
+                              <div className="flex flex-col gap-2">
+                                <div className="flex items-center gap-2">
+                                  {getIconoEstado(alumno.estado)}
+                                  <Badge className={getColorEstado(alumno.estado)}>
+                                    {alumno.estado === "completo"
+                                      ? "Completo"
+                                      : alumno.estado === "incompleto"
+                                      ? "Incompleto"
+                                      : "Sin iniciar"}
+                                  </Badge>
+                                </div>
+                                <div className="flex items-center gap-2 text-xs">
+                                  <Progress 
+                                    value={alumno.progreso.porcentaje} 
+                                    className={getColorProgreso(alumno.progreso.porcentaje)}
+                                  />
+                                  <span className="whitespace-nowrap">{alumno.progreso.completados} de {alumno.progreso.total} ({alumno.progreso.porcentaje}%)</span>
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => {
+                                    setSelectedAlumno(alumno);
+                                    setEvaluacionDialogOpen(true);
+                                  }}
+                                >
+                                  <CheckCircle className="h-4 w-4 mr-1" />
+                                  Evaluar
+                                </Button>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => verDetalleAlumno(alumno.id)}
+                                >
+                                  <BarChartIcon className="h-4 w-4 mr-1" />
+                                  Ver detalle
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => exportarReporteIndividual(alumno)}
+                                >
+                                  <FileText className="h-4 w-4 mr-1" />
+                                  PDF
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {alumnosFiltrados.map((alumno) => (
+                      <Card key={alumno.id} className="border-l-4 overflow-hidden hover:shadow-md transition-shadow"
+                        style={{
+                          borderLeftColor: 
+                            alumno.estado === "completo" 
+                              ? "#22c55e" 
+                              : alumno.estado === "incompleto" 
+                              ? "#f59e0b" 
+                              : "#ef4444"
+                        }}
+                      >
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">{alumno.nombre}</CardTitle>
+                          <CardDescription>{alumno.grupoNombre} - {alumno.nivel}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="pb-2">
+                          <div className="flex justify-between mb-2">
+                            <div className="text-sm">Promedio general:</div>
+                            <div className="text-sm font-medium">{(alumno.promedio / 10).toFixed(1)}</div>
+                          </div>
+                          
+                          <div className="mt-3 mb-2">
+                            <div className="flex items-center justify-between mb-1">
+                              <div className="text-sm flex items-center gap-1">
+                                {getIconoEstado(alumno.estado)}
+                                <span>Progreso de evaluación:</span>
+                              </div>
+                              <div className="text-xs font-medium">
+                                {alumno.progreso.porcentaje}%
+                              </div>
+                            </div>
+                            <Progress 
+                              value={alumno.progreso.porcentaje} 
+                              className={getColorProgreso(alumno.progreso.porcentaje)}
+                            />
+                            <div className="text-xs text-muted-foreground mt-1 text-center">
+                              {alumno.progreso.completados} de {alumno.progreso.total} subtemas
+                            </div>
+                          </div>
+                          
+                          <Accordion type="single" collapsible>
+                            <AccordionItem value="materias">
+                              <AccordionTrigger className="text-sm py-1">Ver materias</AccordionTrigger>
+                              <AccordionContent>
+                                <div className="space-y-1">
+                                  {alumno.materias.map((materia) => (
+                                    <div key={materia.id} className="flex justify-between text-sm">
+                                      <span>{materia.nombre}:</span>
+                                      <span className="font-medium">{(materia.promedio / 10).toFixed(1)}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
+                        </CardContent>
+                        <CardFooter className="pt-0 flex-col gap-2">
+                          <div className="w-full flex justify-between items-center">
+                            <Badge className={getColorEstado(alumno.estado)}>
+                              {alumno.estado === "completo"
+                                ? "Evaluación completa"
+                                : alumno.estado === "incompleto"
+                                ? "Evaluación incompleta"
+                                : "Sin iniciar"}
+                            </Badge>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => {
+                                setSelectedAlumno(alumno);
+                                setEvaluacionDialogOpen(true);
+                              }}
+                            >
+                              <CheckCircle className="h-4 w-4 mr-1" />
+                              Evaluar
+                            </Button>
+                          </div>
+                          <div className="w-full flex justify-between">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => verDetalleAlumno(alumno.id)}
+                            >
+                              <BarChartIcon className="h-4 w-4 mr-1" />
+                              Ver detalle
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => exportarReporteIndividual(alumno)}
+                            >
+                              <FileText className="h-4 w-4 mr-1" />
+                              Reporte PDF
+                            </Button>
+                          </div>
+                        </CardFooter>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </>
+        )}
+      </div>
+      
+      {/* Diálogo de evaluación de alumno */}
+      {selectedAlumno && (
+        <EvaluacionDialog
+          alumnoId={selectedAlumno.id}
+          alumnoNombre={selectedAlumno.nombre}
+          open={evaluacionDialogOpen}
+          onOpenChange={(open) => {
+            setEvaluacionDialogOpen(open);
+            // Si se cierra el diálogo, vamos a esperar antes de limpiar el alumno seleccionado
+            // para que los datos persistan entre aperturas cercanas en el tiempo
+            if (!open) {
+              // No limpiamos el alumno seleccionado para permitir reabrir el diálogo
+              // con el mismo alumno y que los datos persistan
+            }
+          }}
+          onEvaluacionCompleta={() => {
+            // Refrescar los datos después de completar la evaluación
+            queryClient.invalidateQueries({ 
+              queryKey: ["/api/academic-observer/seguimiento-grupo"] 
+            });
+            // También invalidamos la consulta de subtemas para este alumno
+            queryClient.invalidateQueries({
+              queryKey: [`/api/academic-observer/subtemas-alumno/${selectedAlumno.id}`]
+            });
+            toast({
+              title: "Evaluación guardada",
+              description: "Los cambios y comentarios han sido guardados correctamente",
+            });
+          }}
+        />
+      )}
+    </>
+  );
+}
