@@ -1,0 +1,93 @@
+📌 Instrucción al Agente Replit
+🛠️ Tarea: Iniciar implementación del módulo /admin/reportes-financieros
+
+✅ Objetivo:
+Construir un Panel de Reportes Financieros para administradores, con KPIs, filtros, tablas y un botón que genera un resumen automatizado con IA (Claude).
+
+📍 Ruta:
+/admin/reportes-financieros
+
+🔒 Acceso: Solo roles admin y coordinador
+
+1. 🔹 Diseño General del Módulo
+Componentes principales:
+
+a) Resumen Financiero (tarjetas tipo KPI):
+Total recaudado este mes
+
+Total adeudado vigente
+
+Porcentaje de cumplimiento (recaudado vs esperado)
+
+Concepto más pagado
+
+Grupo con mayor morosidad
+
+b) Filtros dinámicos
+Año escolar
+
+Mes
+
+Grupo
+
+Concepto de pago
+
+c) Gráficas
+📊 Recaudación mensual (gráfico de barras o línea)
+
+🧾 Distribución de ingresos por concepto
+
+👥 Tabla de deudores por alumno (nombre, grupo, monto, último pago)
+
+2. 🧠 Resumen Inteligente con Claude AI
+Agregar botón flotante o dentro del panel:
+
+"🧠 Generar Resumen con IA"
+
+Al hacer clic:
+Recolectar los datos actuales visibles (totales, gráficos, alumnos)
+
+Llamar al endpoint POST /api/ai/resumen-financiero
+
+Enviar estructura tipo:
+
+json
+Copiar
+Editar
+{
+  "mes": "abril",
+  "totalRecaudado": 125000,
+  "totalAdeudado": 24000,
+  "porcentajeCumplimiento": 83.8,
+  "grupoMoroso": "3°A",
+  "conceptoTop": "Colegiatura",
+  "topDeudores": [
+    { "nombre": "Luis Pérez", "monto": 5200 },
+    { "nombre": "Ana Ramírez", "monto": 4800 }
+  ]
+}
+Claude debe devolver un resumen profesional, claro y con recomendaciones accionables.
+
+📄 El resultado debe mostrarse en un modal con opción a copiar, cerrar o exportar como PDF (fase posterior).
+
+🧠 Prompt IA sugerido
+plaintext
+Copiar
+Editar
+Eres un asistente financiero escolar. Analiza estos datos de cobranza y genera un resumen ejecutivo. Enfócate en:
+
+- Recaudación del mes
+- Cumplimiento de pagos
+- Grupos o alumnos con riesgo
+- Conceptos más pagados
+- Recomendaciones claras para administración
+
+Usa un tono profesional y preciso.
+🧩 Consideraciones Técnicas
+Utilizar useQuery para cargar datos desde /api/payments/summary, /api/debts, etc.
+
+Crear nuevo endpoint /api/ai/resumen-financiero si aún no existe
+
+Reutilizar estilos ya implementados en módulos como Recordatorios o Panel de Riesgo
+
+De ser posible, dejar lista la base para filtros reutilizables por periodo, grupo, año escolar

@@ -1,0 +1,44 @@
+✅ Instrucción para Mejora UX en el Componente de Calendario
+🎯 Objetivo:
+Optimizar la experiencia de usuario del componente de calendario en el dashboard sin alterar la lógica de backend ni la estructura de datos. Solo aplicar mejoras visuales y de interacción ligera compatibles con el diseño actual del sistema.
+
+📌 Cambios solicitados
+1. Indicador visual en días con eventos
+Agregar una marca visual sutil (punto, fondo suave o borde) a los días del mes que tengan eventos registrados.
+
+Esta marca debe respetar el diseño minimalista del sistema y no alterar el espaciado del calendario.
+
+2. Interacción básica en días del mes
+Hacer que al hacer clic en cualquier día del calendario, se despliegue una pequeña tarjeta o tooltip con la leyenda:
+
+“No hay eventos programados” si no hay eventos.
+
+Mostrar un listado de los eventos si los hubiera (solo visual, sin lógica nueva).
+
+Esta funcionalidad puede ser estática o semiestática: no debe depender de una consulta al servidor ni requerir cambios en backend.
+
+3. Mejorar visibilidad de navegación
+Aumentar ligeramente el tamaño o el contraste de las flechas de navegación (← →) para avanzar o retroceder entre meses.
+
+Asegurar que sean más accesibles visualmente en pantallas con brillo bajo o en modo claro.
+
+4. Botón ‘+’ para agregar evento (opcional y controlado por rol)
+Agregar un pequeño botón de “+” (ícono flotante o junto al título “Calendario”) que simule agregar un evento. Por ahora puede abrir un modal simulado o simplemente mostrar una alerta “Función próximamente disponible”.
+
+No vincular este botón a ninguna lógica ni modificar permisos existentes.
+
+5. Actualizar texto de la tarjeta “Próximos Eventos”
+Cuando no haya eventos programados, usar un mensaje más amigable:
+
+“No hay eventos programados para este mes. Puedes agregarlos desde el botón superior.” (si el botón ‘+’ está activo)
+
+O simplemente: “Sin eventos programados por ahora.”
+
+🚫 Importante
+No modificar la lógica de carga del calendario.
+
+No alterar el estado ni el backend del sistema.
+
+No agregar funciones de base de datos o endpoints nuevos.
+
+Solo mejorar experiencia de visualización e interacción ligera.

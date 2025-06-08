@@ -1,0 +1,45 @@
+✅ Instrucción para el Agente Replit – Mejoras en Módulo de Comunicación Escolar (Mensajes Privados)
+Por favor, implementa las siguientes mejoras en el módulo de Mensajes Privados del sistema EduMex ERP:
+
+🧠 1. Funcionalidad de IA - Sugerencias de Respuesta Rápida
+Utiliza una función auxiliar para analizar el contenido del último mensaje recibido en cada conversación.
+
+Genera de 2 a 3 sugerencias de respuesta breve que el usuario pueda insertar con un solo clic.
+
+Las sugerencias deben generarse usando una lógica simple o integración básica de IA (puede estar simulada por ahora si aún no hay acceso a un modelo).
+
+Ejemplos: “Gracias por la información”, “Lo revisaré con gusto”, “¿Podemos reagendar?”
+
+🔄 2. Indicador de Nuevos Mensajes
+Muestra un punto azul (🔵) o estilo visual claro junto al nombre del remitente si hay mensajes no leídos en esa conversación.
+
+Actualiza el estado a “leído” una vez que el usuario haga clic en la conversación.
+
+🕵️ 3. Vista Previa de Último Mensaje
+En la columna izquierda de conversaciones, debajo del nombre del contacto, muestra una línea con el contenido del último mensaje.
+
+Limita la vista previa a los primeros 40 caracteres.
+
+🎯 4. Mejora del Buscador
+Asegúrate de que el buscador filtre por:
+
+Nombre del remitente o destinatario.
+
+Palabras clave dentro de los últimos mensajes.
+
+Si el texto coincide con varios resultados, mostrarlos en orden cronológico (más recientes primero).
+
+👁‍🗨 5. Animación de Transición
+Agrega una animación suave (ej. desvanecimiento o deslizamiento) al cambiar de conversación.
+
+Esto mejora la experiencia visual y percepción de fluidez en el módulo.
+
+⚙️ Notas Técnicas
+Mantén la autenticación y control de acceso actual (JWT y por roles).
+
+Usa useMemo o useCallback donde sea útil para optimizar la carga de conversaciones y filtrado.
+
+La estructura visual debe conservarse limpia y coherente con el diseño general del sistema EduMex ERP.
+
+✅ Una vez aplicadas estas mejoras, por favor reinicia la app y confírmame que el módulo está actualizado para probarlo.
+

@@ -1,0 +1,47 @@
+🎨 Instrucción para corregir detalles visuales en la vista de calendario semanal
+Por favor realiza los siguientes ajustes visuales en la vista de calendario semanal (/grupos/:id/horario/visual) para mejorar la experiencia de usuario:
+
+🟩 1. Corregir visualización de bloques de clase
+Problema: El bloque de clase que aparece en color verde (lunes, 7:00–9:00 aprox.) no muestra correctamente el contenido. Sólo se ve un carácter suelto ()).
+
+Acciones necesarias:
+
+Asegúrate de que todos los campos del horario (materia, aula, profesor, modalidad) estén disponibles antes de renderizar el contenido del bloque.
+
+Verifica si hay clases sin nombre de materia o profesor y renderiza un texto alternativo como "Clase sin nombre" o "Información no disponible".
+
+Ajusta el tamaño mínimo del bloque (altura y padding interno) para asegurar que el texto no se corte.
+
+📐 2. Agregar bordes visibles en la columna del viernes
+Problema: La columna correspondiente al día viernes no muestra las líneas horizontales de la cuadrícula como el resto de los días.
+
+Acciones necesarias:
+
+Asegúrate de que la estructura del grid o tabla incluya el día viernes como una columna completamente funcional y con estilo igual a las demás.
+
+Verifica en CSS que border, border-collapse, border-right y border-bottom estén aplicándose correctamente a todas las celdas, incluyendo la última columna.
+
+Si estás usando grid-template-columns, asegúrate de que el viernes esté incluido en el layout completo.
+
+🧱 3. Estilo y consistencia
+Mantén una altura fija por bloque horario (ej. 60px por hora).
+
+Asegúrate de que todos los días tengan el mismo ancho de columna.
+
+Aplica overflow: hidden o text-overflow: ellipsis si el texto excede el tamaño del bloque.
+
+✅ Resultado esperado:
+Todos los días (lunes a viernes) deben tener la cuadrícula visible.
+
+Todos los bloques de clase deben mostrar claramente:
+
+Materia
+
+Aula (si existe)
+
+Nombre del profesor
+
+Modalidad de clase (Presencial, Virtual, Híbrido)
+
+Ningún bloque debe quedar con contenido incompleto, cortado o fuera de estilo.
+

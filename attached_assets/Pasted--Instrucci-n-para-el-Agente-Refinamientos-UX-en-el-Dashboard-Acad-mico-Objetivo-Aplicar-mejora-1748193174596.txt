@@ -1,0 +1,70 @@
+✅ Instrucción para el Agente – Refinamientos UX en el Dashboard Académico
+🎯 Objetivo
+Aplicar mejoras visuales y de accesibilidad sobre tres elementos del Dashboard Académico para elevar la experiencia del usuario sin alterar estructuras, rutas ni lógica del sistema.
+
+1. 🧩 Tooltip contextual en el “Resumen Semanal” de Asistencia
+Comportamiento esperado:
+
+Al pasar el cursor (hover) sobre los textos:
+
+“Asistencia promedio”
+
+“Promedio de asistencia registrado esta semana entre todos los días hábiles.”
+
+“Día con más inasistencias”
+
+“Día que presentó el mayor número de ausencias no justificadas.”
+
+“Tendencia”
+
+“Comparado con la semana anterior, la asistencia se ha mantenido estable.”
+
+✅ Este comportamiento debe ser únicamente visual (tooltip con delay corto), sin acción de clic ni navegación nueva.
+
+🔒 No modificar datos ni cálculos. Solo agregar ayuda visual para el usuario.
+
+2. 🧩 Unificación visual de tarjetas (estilos)
+Objetivo: Homogeneizar el estilo visual de las siguientes tarjetas:
+
+📊 Resumen Semanal
+
+📚 Materias con Menor Rendimiento
+
+📝 Próximas Tareas
+
+🧾 Estado de Boletas
+
+Cambios visuales permitidos:
+
+Usar un borde delgado (#e0e0e0 o similar) en todas las tarjetas.
+
+Aplicar sombra sutil (shadow-sm) para dar profundidad.
+
+Unificar padding interno (ej. p-4).
+
+Redondear esquinas (rounded-lg o según estándar de AcademiQ).
+
+✅ Asegurar consistencia en tamaño de título, espaciado vertical y alineación de contenido.
+
+🔒 No cambiar tamaños o layout general. Solo ajustes estéticos unificados.
+
+3. 🧩 Iconos de estado junto a materias con bajo rendimiento
+Objetivo: Reforzar visualmente el nivel de atención requerido por cada materia.
+
+Implementación:
+
+Agregar íconos de estado (a la izquierda del nombre de la materia):
+
+Nivel de riesgo	Condición (según promedio o alumnos afectados)	Ícono sugerido
+Alto (ej. ≥3 alumnos)	“Requiere atención” en rojo	🔴
+Moderado (1-2 alumnos)	“Requiere atención” en naranja	🟠
+Estable o sin datos	“N/A”	🔵 o ❔
+
+Usar un solo ícono por línea y mantenerlo alineado verticalmente con el texto.
+
+🔒 No modificar los datos de rendimiento ni las condiciones actuales. Solo representar visualmente con base en las cifras ya mostradas.
+
+📌 Si no hay información suficiente, usar ícono ❔ con tooltip:
+
+“Datos aún no disponibles para esta materia.”
+

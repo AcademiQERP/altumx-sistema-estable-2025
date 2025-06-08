@@ -1,0 +1,64 @@
+📌 Instrucción al agente para mejora visual del informe PDF
+Ubicación del archivo a modificar:
+client/src/services/parent-report-pdf.ts
+
+✅ 1. Corregir símbolo extraño antes del título de la sección “Recomendaciones personalizadas”
+Problema: Se visualiza un carácter extraño (%Ϊ) antes del título.
+
+Acción: Eliminar cualquier símbolo innecesario que preceda al título "Recomendaciones personalizadas para el estudiante".
+
+Verificar: Que se renderice solo el texto sin ningún prefijo o emoji mal interpretado.
+
+🛠 2. Alinear verticalmente el contenido de la tabla de “Áreas de Desarrollo y Evaluación”
+Acción: Aplicar valign: 'middle' en las celdas de la tabla de niveles.
+
+Objetivo: Centrar verticalmente los textos de la columna “Nivel”.
+
+🧱 3. Mejorar legibilidad dividiendo materias por bloques temáticos (opcional si hay muchas materias)
+Agrupar materias (si se exceden 6 materias) en bloques como:
+
+📘 Académicas: Matemáticas, Español, Ciencias, Historia
+
+🎨 Creativas: Arte, Tecnología
+
+⚽ Formativas: Educación Física, etc.
+
+Implementación: Insertar filas de subtítulo dentro de la tabla con estilo de fondo sutil (fillColor) y colSpan: 2.
+
+✨ 4. Añadir íconos visuales al lado del nivel de desempeño (opcional)
+Nivel	Etiqueta con ícono sugerido
+Óptimo	🌟 Óptimo o ✅ Óptimo
+Satisfactorio	☑️ Satisfactorio o 👍
+En proceso	⚠️ En proceso
+Inicial	❌ Inicial
+
+Revisar compatibilidad con fuente PDF. Si hay conflicto, usar íconos ASCII o eliminar fallback.
+
+🎨 5. Asegurar color coherente entre leyenda y tabla de evaluación
+Colores por nivel:
+
+#28a745 (verde): Óptimo
+
+#007bff (azul): Satisfactorio
+
+#f0ad4e (naranja): En proceso
+
+#dc3545 (rojo): Inicial
+
+Acción: Aplicar estos estilos a la columna de “Nivel” en la tabla, usando styles: { textColor: ..., fontStyle: 'bold' }.
+
+🧪 Verificación final:
+Exportar un PDF de prueba.
+
+Confirmar:
+
+Que no hay símbolos extraños.
+
+Que las etiquetas de niveles están alineadas.
+
+Que se visualizan íconos correctamente (si se implementan).
+
+Que los colores se corresponden con la leyenda.
+
+Que la tabla se ve clara y segmentada si hay múltiples áreas.
+

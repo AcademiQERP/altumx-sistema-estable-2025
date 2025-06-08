@@ -1,0 +1,34 @@
+✅ Instrucción al agente – Mejora UX en Resumen de Asistencia
+🎯 Objetivo:
+Optimizar visualmente el componente de Resumen de Asistencia del Dashboard sin modificar la lógica actual ni su funcionalidad. Solo aplicar mejoras visuales, accesibles y explicativas para mejorar la comprensión del usuario final (docente o administrativo).
+
+🧠 Mejora visual integral del componente (sin alterar datos ni flujos):
+Mejora Propuesta	Justificación UX
+Mostrar totales absolutos	Junto al porcentaje actual (ej. Presente: 65% (13 alumnos)), mostrar también la cantidad de estudiantes reales, ayuda a contextualizar mejor la escala.
+Agregar una barra de promedio semanal	Una última columna a la derecha ("Promedio") que consolide los porcentajes semanales. Brinda un resumen de tendencia visual inmediato.
+Añadir indicadores visuales de tendencia	Pequeñas flechas visuales (↗ mejora, ↘ descenso, → estable) junto al valor de asistencia para señalar variaciones frente al promedio semanal.
+Botón de exportación del gráfico (.PNG / .PDF)	Para compartir el resumen con directivos o padres de forma rápida. Muy útil para reportes semanales o reuniones.
+Agregar resumen textual automático debajo del gráfico	Insertar un bloque tipo tarjeta con texto como el siguiente:
+
+📋 Resumen del Día – Viernes
+- Asistencia general: 65% de asistencia.
+- Retardos: 15%.
+- Ausencias sin justificar: 15%.
+- Justificados: 5%.
+
+🧠 Interpretación: Nivel de asistencia más bajo que el resto de la semana. Se sugiere enviar recordatorios y verificar justificaciones.
+
+📈 Tendencia semanal: Descendente desde el miércoles (85%) hasta viernes (65%).
+Corregir el diseño para evitar que las barras se salgan del borde de la tarjeta	Actualmente, el gráfico sobresale visualmente del área del componente. Ajustar el padding, overflow o container bounds para que las barras respeten los límites del contenedor.
+Extra opcional: Agregar filtro por grupo o nivel escolar	Ej. Filtrar por "1°A", "2°B", etc., para facilitar el análisis específico por grado o grupo en escuelas con varios niveles educativos.
+
+🔒 Requisitos técnicos importantes (NO modificar):
+❌ No modificar la lógica de cálculo del gráfico.
+
+❌ No eliminar ni reordenar la estructura actual del gráfico.
+
+✅ Las mejoras deben ser estrictamente visuales y opcionales para el usuario.
+
+✅ Las tarjetas o componentes adicionales deben seguir la línea de diseño actual del sistema (bordes redondeados, iconos suaves, textos accesibles).
+
+✅ Asegurar compatibilidad responsiva.

@@ -1,0 +1,70 @@
+🟣 Indicación para el Agente: Fase 3 – Mejora Visual, Contenido Completo y PDF Real
+🎯 Objetivo:
+Refinar el informe web /informe/:id para mejorar la presentación de contenido, robustecer la experiencia del usuario y permitir la descarga de un PDF real generado desde el navegador.
+
+✅ Alcance de esta fase:
+1. Mostrar todas las secciones del informe con datos completos
+Verificar y asegurar que el informe web muestre correctamente:
+
+🌟 Fortalezas
+
+⚠️ Áreas a Fortalecer
+
+📊 Evaluación por Materia (mostrar todas las materias con su calificación)
+
+📝 Observaciones Individuales
+
+🚀 Plan de Seguimiento
+
+📋 Conclusión Final
+
+🟦 Si alguna sección no tiene datos, mostrar un mensaje claro como:
+
+“No se han registrado observaciones en esta sección aún.”
+
+2. Manejo de errores para informes inválidos
+Cuando se acceda a un ID inválido o inexistente (/informe/9999), mostrar una vista de error amigable:
+
+Mensaje:
+
+🔒 “Este informe no está disponible. Por favor verifica el enlace o contacta con la institución.”
+
+Incluir botón: Volver al inicio o Regresar
+
+3. Implementar descarga real de PDF en navegador
+Reemplazar el botón simulado por una descarga funcional del informe:
+
+Usar alguna de estas opciones:
+
+html2pdf.js
+
+react-to-print
+
+Incluir:
+
+Logo institucional
+
+Nombre del alumno
+
+Fecha de generación
+
+Todo el contenido visible en pantalla
+
+Pie de página con leyenda:
+"Informe generado automáticamente por EduMEX – Sistema Académico"
+
+Estilo limpio y legible (similar a la vista web)
+
+4. Mejoras menores de experiencia (UX)
+Asegurar que los botones estén bien alineados y tengan etiquetas claras
+
+Verificar que todo se vea correctamente en dispositivos móviles
+
+Añadir espaciado y márgenes consistentes entre secciones
+
+5. No modificar el sistema de autenticación o rutas protegidas
+Este desarrollo debe mantenerse completamente aislado del login, sin cambios en AuthProvider, /api/me, tokens o flujos de usuario autenticado.
+
+📩 Confírmame cuando cada sección esté completada o si deseas una revisión visual intermedia antes de avanzar con el PDF.
+
+Gracias por mantener la estabilidad del sistema durante todo este proceso.

@@ -1,0 +1,59 @@
+✅ Instrucción para el Agente – Mejora Visual del Dashboard Principal
+Objetivo:
+Optimizar visualmente el dashboard principal del sistema AcademiQ para mejorar la experiencia de usuario, sin modificar ninguna lógica funcional ni estructura de datos.
+
+🔒 Reglas de seguridad (NO CAMBIAR NUNCA):
+❌ NO modificar lógica de autenticación, navegación o peticiones.
+
+❌ NO alterar componentes funcionales ni su comportamiento actual.
+
+❌ NO eliminar ningún componente existente.
+
+✅ SÓLO realizar mejoras visuales, de estilo y organización UX.
+
+🎯 Cambios visuales solicitados
+Acciones Rápidas:
+
+Rediseñar la sección para darle mayor jerarquía visual (tamaño moderado, espaciado uniforme).
+
+Alinear íconos centrados sobre texto.
+
+Colocar un botón adicional “⚙️ Personalizar” al lado derecho si es posible (sólo visual, sin funcionalidad).
+
+Tarjetas de Métricas (Arriba del Dashboard):
+
+Añadir un pequeño ícono de ayuda (ℹ️) en cada tarjeta, que despliegue un tooltip con explicación (ejemplo: "Alumnos activos en la plataforma este mes").
+
+Dar mayor padding interno y sombra sutil para que visualmente se destaquen más.
+
+Calendario (Izquierda):
+
+Resaltar el día actual (color azul suave o subrayado).
+
+Colorear con punto los días que contienen eventos (si aplica en el futuro).
+
+Agregar texto en gris claro para los días pasados del mes.
+
+Resumen de Asistencia (Centro):
+
+Aumentar el contraste entre los colores de las barras (especialmente 'justificado' y 'retardo').
+
+Incluir un pequeño texto descriptivo encima del gráfico (ej: “Datos de los últimos 5 días”).
+
+Alumnos Recientes (Inferior):
+
+Ajustar columnas para que CURP y Grupo se lean más cómodamente en pantallas medianas.
+
+Incluir botón tipo "🔍 Ver Perfil" al pasar el mouse sobre un alumno (visual solamente).
+
+Ajustar el espaciado entre filas y usar separadores más suaves.
+
+💡 Consideraciones adicionales (no obligatorias pero recomendadas):
+Usar colores suaves y coherentes con la línea de diseño general.
+
+Asegurar que todo sea 100% responsivo en pantallas de 11”-14”.
+
+Validar que los cambios no alteran la experiencia de carga o performance del dashboard.
+
+✅ Confirmación
+Por favor confirma cuando las mejoras visuales hayan sido aplicadas sin errores, y proporciona una captura de pantalla para revisión.

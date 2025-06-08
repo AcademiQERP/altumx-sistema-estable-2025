@@ -1,0 +1,69 @@
+🎯 Objetivo:
+Implementar visualmente la sección de vinculación entre padres y alumnos en el portal de administración, utilizando los métodos de backend ya desarrollados (getVinculacionesByResponsable, createVinculacion, deleteVinculacion).
+
+✅ Tareas a Desarrollar:
+1. Agregar una sección de “Familiares / Responsables” dentro del perfil de un alumno
+Ubicación sugerida:
+
+Cuando el administrador entra al perfil de un alumno (/admin/alumnos/:id), mostrar una pestaña o sección llamada:
+
+🧑‍👧 Familiares Vinculados
+
+2. Mostrar una tabla con los padres vinculados al alumno
+Columnas:
+
+
+Nombre del padre	Correo electrónico	Relación	Acciones
+Juan Pérez	padre@example.com	Padre	❌ Eliminar
+Usar el método getVinculacionesByResponsable inversamente (filtrando por id_alumno) para cargar estos datos.
+
+3. Agregar botón: “Agregar responsable”
+Abre un modal o formulario emergente con los siguientes campos:
+
+Correo electrónico del padre/madre/tutor (buscar en base de usuarios existentes con rol PARENT)
+
+Relación: (Padre / Madre / Tutor legal / Otro)
+
+Validar existencia del usuario.
+
+Al guardar, utilizar createVinculacion con el id_alumno, id_usuario, y tipo_relacion.
+
+4. Agregar botón de acción: “Eliminar”
+Cada fila debe tener un botón para desvincular al padre del alumno.
+
+Al hacer clic, mostrar confirmación:
+
+¿Estás seguro de que deseas desvincular a este responsable?
+
+Usar deleteVinculacion con los identificadores correspondientes.
+
+🧪 Comportamiento Esperado:
+Al ingresar a un alumno, el administrador puede ver si tiene padres vinculados o no.
+
+Puede agregar un nuevo padre por correo (solo si ya está registrado como usuario con rol PARENT).
+
+Puede eliminar vínculos existentes.
+
+Se muestran mensajes de confirmación o error en cada acción.
+
+🛡️ Consideraciones de seguridad:
+Validar que no se pueda agregar un usuario con rol diferente a PARENT.
+
+Evitar duplicados con la validación que ya implementaste en backend.
+
+Asegurar que solo usuarios con permisos de administrador puedan acceder a esta función.
+
+🎨 UX / UI Sugerido:
+Usa un diseño claro y coherente con el resto del sistema.
+
+Mensajes de éxito:
+
+“Responsable vinculado correctamente.”
+
+“Vínculo eliminado correctamente.”
+
+Mensajes de error amigables si el correo no está registrado.
+
+🔁 Progreso controlado:
+No modificar todavía el portal de padres. Este paso se realizará en la siguiente fase (Fase 3) una vez validado que la vinculación funcione correctamente desde el panel del administrador.
+

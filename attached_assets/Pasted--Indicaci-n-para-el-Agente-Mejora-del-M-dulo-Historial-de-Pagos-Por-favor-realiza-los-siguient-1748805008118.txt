@@ -1,0 +1,69 @@
+✅ Indicación para el Agente – Mejora del Módulo "Historial de Pagos"
+Por favor, realiza los siguientes ajustes en el módulo Historial de Pagos, asegurando coherencia visual y funcional con el nuevo diseño implementado en el módulo de Estado de Cuenta:
+
+1. 🔄 Actualizar las tarjetas superiores
+Reemplazar las tres tarjetas actuales (Total Pagado, Pagos Pendientes, Pagos Rechazados) por dos tarjetas con el mismo componente visual usado en Estado de Cuenta:
+
+Tarjeta 1: Total Pagado (periodo actual)
+
+Título: Total Pagado en el Periodo
+
+Valor dinámico con formato moneda (ej. $27,994 MXN)
+
+Badge verde si hay pagos; gris si no hay
+
+Tarjeta 2: Pagos Pendientes
+
+Título: Pagos Pendientes en el Periodo
+
+Valor dinámico (ej. $30,000 MXN)
+
+Badge amarillo si hay adeudos
+
+(❗ Omitir la tarjeta de "Pagos Rechazados" por ahora si no hay funcionalidad activa relacionada).
+
+2. 📊 Estilizar la tabla de historial
+Utilizar la misma estructura de badges y estilos aplicados en el módulo de Estado de Cuenta:
+
+pagado: fondo verde claro, texto verde oscuro
+
+pendiente: fondo amarillo claro, texto amarillo oscuro
+
+rechazado: fondo rojo claro (si aplica)
+
+Mostrar íconos junto al método de pago:
+
+💵 Efectivo
+
+💳 Tarjeta
+
+🔁 Transferencia
+
+Si el campo "Recibo" tiene funcionalidad, incluir botón:
+
+Solicitar (si aún no se descarga)
+
+Descargar (si ya está disponible)
+
+3. 🧠 Agrupar o etiquetar visualmente los pagos por periodo
+En caso de que existan muchos registros, añadir un encabezado opcional tipo acordeón o etiqueta que agrupe por mes/año:
+
+Ejemplo:
+▾ Junio 2025
+▾ Mayo 2025
+
+(Solo agrupar visualmente si mejora la comprensión del historial).
+
+4. 🔗 Consistencia y navegación
+Verificar que el diseño general y tipografía sea idéntico al de Estado de Cuenta.
+
+Opcional: incluir botón “← Regresar a Estado de Cuenta” al inicio o final del módulo para facilitar la navegación.
+
+5. ⚠️ Consideraciones de seguridad y estabilidad
+No eliminar ninguna funcionalidad actual del backend.
+
+Asegurarse que las tarjetas y valores estén conectados con los mismos datos ya utilizados en este módulo (no duplicar lógica).
+
+Validar que los filtros por estado y periodo sigan funcionando sin errores.
+
+Este ajuste unificará visual y funcionalmente el ecosistema financiero para los padres, mejorando la claridad, accesibilidad y usabilidad general del sistema.

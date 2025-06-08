@@ -1,0 +1,65 @@
+Objetivo: Mostrar correctamente la tarjeta del Plan de Recuperación Académica para los alumnos que sí lo necesitan, con el mismo estilo visual que la tarjeta que se muestra cuando no se requiere plan (como Alexa, ID: 2).
+
+✅ Cambios solicitados
+Unificar el componente visual
+
+Utilizar el mismo tipo de tarjeta que se muestra cuando no se requiere plan.
+
+Solo debe cambiar el contenido del mensaje, color de estado, y elementos específicos del plan de recuperación.
+
+Renderizar el plan cuando es necesario (ej. ID: 3 - Dania María)
+
+Mostrar la tarjeta automáticamente y de forma persistente cuando se genera la vista previa del plan.
+
+Debe incluir:
+
+Encabezado con nombre del alumno, grupo y nivel.
+
+Lista de materias con promedio menor a 7.0.
+
+Subtemas (si existen) que requieren refuerzo.
+
+Recomendaciones pedagógicas (si existen).
+
+Botón: “Descargar plan de recuperación en PDF”.
+
+Validación de alumnos incompletos
+
+Si el alumno no tiene estructura de materias/subtemas:
+
+Mostrar mensaje claro:
+
+“Este alumno no tiene datos académicos suficientes para generar un plan de recuperación.”
+
+Evitar el llamado al endpoint /api/report-cards/:id para evitar errores 404.
+
+Escala base 10 y umbrales de evaluación
+
+Confirmar que todos los valores se muestran en escala base 10.
+
+Umbrales visuales:
+
+🟢 Óptimo: ≥ 9.0
+
+🔵 Satisfactorio: ≥ 8.0
+
+🟡 En proceso: ≥ 7.0
+
+🔴 Inicial: < 7.0
+
+💡 Referencias clave
+Alexa (ID: 2) y Andrea (ID: 4): sí se muestra tarjeta cuando no se requiere plan. Ese estilo debe usarse como base.
+
+Dania María (ID: 3): sí requiere plan, pero la tarjeta no se está mostrando, aunque la lógica de detección es correcta.
+
+Emilia (ID: 5): también puede usarse para pruebas adicionales.
+
+Estudiantes con ID > 5 son de prueba, algunos no tienen estructura de materias (ej. ID: 7).
+
+✅ Resultado esperado
+La tarjeta del plan de recuperación debe mostrarse claramente en pantalla cuando corresponda.
+
+El diseño debe ser coherente con el componente actual de evaluación de rendimiento.
+
+El PDF sigue generándose como hasta ahora, pero también debe existir la visualización en pantalla.
+

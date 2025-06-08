@@ -1,0 +1,63 @@
+✅ Instrucción para el Agente: Implementar Dashboard Principal del Módulo de Finanzas
+🎯 Objetivo:
+Implementar un dashboard visual principal dentro del módulo de Finanzas en la ruta /finanzas/dashboard, que centralice y muestre de forma clara y no intrusiva la información clave de los submódulos: Pagos, Adeudos, Estado de Cuenta, Recordatorios, Reportes y Clasificación de Riesgo.
+
+🧭 Ubicación:
+Crear una vista general accesible desde el menú lateral como la primera opción al ingresar a “Finanzas”.
+
+Ruta sugerida: /finanzas/dashboard
+
+Esta vista no reemplaza ningún submódulo, solo se agrega como vista inicial de consulta visual.
+
+🖼️ Diseño del Dashboard
+🔢 Indicadores principales (parte superior, estilo tarjetas):
+
+💰 Ingresos totales del mes actual
+
+💸 Total de pagos pendientes
+
+📊 Facturas emitidas vs pagadas
+
+🔴 Alumnos con adeudo activo
+
+⚠️ Alumnos clasificados como riesgo alto o medio
+
+📊 Secciones gráficas o tabulares (tipo cards):
+
+Gráfico de Ingresos vs Adeudos (mensual, por semana o ciclo escolar)
+
+Tabla de últimos pagos registrados (fecha, alumno, monto, método)
+
+Tabla de próximos vencimientos de adeudos
+
+Resumen de Recordatorios programados (con fechas)
+
+Cards de Clasificación de Riesgo (ej. "5 alumnos en Riesgo Alto", etc.)
+
+📎 Extras visuales:
+
+Opción para exportar el resumen (PDF o Excel)
+
+Filtros por nivel o grupo (solo visual, no modificar la lógica)
+
+Diseño responsivo, con tarjetas en filas flexibles y scroll interno si es necesario
+
+🔐 Seguridad y restricciones importantes
+❗No modificar ninguna lógica existente de datos ni los submódulos individuales.
+
+Toda la información mostrada debe venir de los endpoints ya existentes.
+
+El dashboard es solo de lectura (📄), no debe incluir funciones de edición o eliminación.
+
+No modificar las rutas actuales como /pagos, /adeudos, etc.
+
+Validar que solo usuarios con permisos de acceso a Finanzas puedan ver este dashboard.
+
+Usar los mismos estilos de diseño del sistema (coherencia visual con el dashboard general de AcademiQ).
+
+🧠 UX Sugerida
+Tarjetas tipo resumen con íconos y colores sutiles (sin sobresaturar la vista)
+
+Priorizar la claridad visual sobre el exceso de datos
+
+Si no hay información para mostrar (ej. ningún pago reciente), mostrar un mensaje claro como: “No hay registros recientes en esta sección.”

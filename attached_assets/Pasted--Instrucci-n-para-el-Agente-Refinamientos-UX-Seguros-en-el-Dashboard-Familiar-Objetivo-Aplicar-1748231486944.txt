@@ -1,0 +1,65 @@
+✅ Instrucción para el Agente – Refinamientos UX Seguros en el Dashboard Familiar
+🎯 Objetivo
+Aplicar mejoras visuales en el portal familiar para aumentar la comprensión, accesibilidad y percepción positiva, sin alterar la lógica, datos o estructura interna del sistema.
+
+🔹 1. Comportamiento visual adaptativo en tarjetas de hijos (✅ Alta prioridad)
+Situación actual: Las tarjetas de hijos se muestran en fila horizontal. Si una familia tiene más de 3 hijos, esto puede romper el layout o saturar la vista.
+
+🔧 Instrucción técnica segura:
+
+Implementar un scroll horizontal responsivo en la sección de tarjetas por hijo.
+
+En dispositivos móviles o tablets, permitir que las tarjetas puedan desplazarse de manera lateral.
+
+Opcional: agregar flechas sutiles de navegación (← →) visibles al pasar el mouse, solo si mejora la usabilidad.
+
+🔒 No alterar cómo se cargan los hijos ni sus datos. Solo modificar el contenedor visual (overflow-x: auto, scroll-snap, etc.).
+
+🔹 2. Mejora de la sección “Avisos escolares recientes” cuando está vacía
+Situación actual: Cuando no hay avisos, se muestra solo un ícono y texto plano.
+
+🔧 Cambio visual sugerido:
+
+Mantener el ícono de megáfono 🎤
+
+Debajo, incluir el mensaje:
+
+“No hay avisos escolares por ahora. Te notificaremos cuando se publique alguno.”
+
+Agregar un pequeño ícono ilustrativo (📬 o 📭) si se desea dar un toque más amigable.
+
+🔒 No modificar la lógica de carga de avisos. Solo mejorar el mensaje visual para cuando el array de avisos esté vacío.
+
+🔹 3. Mini resumen de tareas entregadas y pendientes
+Ubicación: Justo debajo de la tarea próxima (cuando exista al menos una).
+
+🔧 Instrucción UX segura:
+
+Mostrar línea adicional (estática, sin clic) con formato:
+
+Tareas completadas: X / Pendientes: Y
+
+Colocar esta línea debajo del título de la tarea próxima.
+
+🔒 No recalcular tareas. Usar los valores que ya se muestran en el sistema (completadas y pendientes) para visualización únicamente.
+
+🧠 Consideraciones de implementación
+Asegurar que estas mejoras no afectan la versión móvil.
+
+Validar que no se alteran componentes funcionales ni interacciones originales.
+
+Si hay más de 3 hijos, probar que la navegación entre tarjetas sea fluida.
+
+✅ Confirmación esperada
+Una vez implementados los cambios:
+
+Enviar captura de:
+
+La vista con scroll horizontal activado en las tarjetas de hijos.
+
+La sección de avisos vacíos con el nuevo mensaje visual.
+
+Una tarea próxima con el mini resumen completadas/pendientes.
+
+Confirmar que los cambios no afectan el rendimiento, ni las sesiones, ni los permisos.
+

@@ -1,0 +1,47 @@
+Gracias por la actualización, Fernando. Con base en el análisis del agente, quedó clara la funcionalidad general y correcta del módulo "Estado de Cuenta" usando como ejemplo a la alumna Ana García Pérez. Sin embargo, como bien mencionas, no se abordó lo solicitado específicamente para la alumna Alexa Fernanda Cebreros Contreras, por lo que es necesario emitir una nueva instrucción dirigida con precisión a ese caso.
+
+🧪 Instrucción de Seguimiento – Verificación y Asociación de Estudiante
+🎯 Objetivo:
+Revisar específicamente la situación de la alumna Alexa Fernanda Cebreros Contreras dentro del sistema, verificar si tiene un padre asociado y, en caso de no existir esa relación, crear la asociación manualmente para permitir el acceso desde el portal de padres.
+
+📍 Pasos a Realizar
+1. Verifica si Alexa Fernanda Cebreros Contreras está registrada
+Confirma si existe un estudiante con ese nombre completo en la base de datos.
+
+Anota su ID de estudiante si está registrado.
+
+2. Verifica si tiene un padre asociado
+Revisa si existe una relación en la tabla intermedia o campo correspondiente (como padre_id, parent_student_link, etc.).
+
+Si NO tiene un padre vinculado, verificar si ya existe un registro para Fernando Cebreros como padre de familia.
+
+3. Crear asociación si no existe
+Si el padre existe pero no está vinculado a Alexa Fernanda:
+
+Establecer la relación correctamente (según el modelo actual de relaciones en Supabase).
+
+Si el padre no existe en la tabla padres o equivalente:
+
+Crear el registro del padre con los datos necesarios.
+
+Luego, vincularlo a Alexa Fernanda.
+
+4. Validar que la asociación permita visualizar el estado de cuenta
+Hacer una solicitud simulada desde el portal de padres autenticado como Fernando Cebreros.
+
+Confirmar que:
+
+La API /api/estado-cuenta/:estudianteId responde correctamente.
+
+El estudiante es visible en /api/parents/:padreId/students.
+
+La interfaz despliega correctamente Total Adeudo, Total Pagado, y Balance Actual.
+
+✅ Resultado Esperado
+
+Verificación	Estado esperado
+Estudiante Alexa Fernanda existe	✅ Sí / ❌ No
+Padre asociado	✅ Sí / ❌ No
+Asociación creada si faltaba	✅ Confirmada
+Datos financieros cargan en frontend	✅ Mostrados correctamente
+Acceso autorizado desde portal padre	✅ Sí

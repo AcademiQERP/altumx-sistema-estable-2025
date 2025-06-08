@@ -1,0 +1,46 @@
+Gracias por la actualización. Haciendo las pruebas correspondientes, detecto lo siguiente:
+
+Efectivamente, el asistente educativo que estaba implementado en el Dashboard Principal (versión anterior) sigue funcionando correctamente:
+→ Se abre una pequeña pantalla emergente, muestra las recomendaciones generadas por IA y da opción de generar el PDF inmediatamente.
+
+Sin embargo, en el nuevo módulo dentro de "Asistente Educativo IA", tanto en "Ver Recomendaciones" como en "Ver Plan de Recuperación", el contenido se genera correctamente en el backend (lo cual ya confirmé), pero no se visualiza en tarjetas ni en pantalla como estaba planteado.
+
+🛠️ Diagnóstico puntual
+El flujo actual en los nuevos módulos es:
+
+Se selecciona el grupo.
+
+Se genera exitosamente el contenido IA (se confirma en backend).
+
+Pero no se renderizan tarjetas en pantalla para visualizar el contenido, como se había diseñado.
+
+🎯 Qué necesitamos corregir
+Objetivo:
+✅ Que después de generar el contenido IA en los módulos "Ver Recomendaciones" y "Ver Plan de Recuperación", inmediatamente se muestren en pantalla tarjetas expandibles que contengan:
+
+Resumen de la situación.
+
+Estrategias de intervención (en Plan de Recuperación).
+
+Recomendaciones específicas (en Ver Recomendaciones).
+
+Sección de firmas (cuando aplique).
+
+Notas adicionales:
+
+Debe respetar el diseño de tarjetas que ya tenemos planteado.
+
+Debe ser dinámico: si no hay contenido aún, mostrar un mensaje amigable ("No hay contenido generado aún").
+
+Opcionalmente, podríamos integrar un pequeño Loader mientras se genera el contenido, para mejorar la experiencia de usuario.
+
+🛡️ Importante
+Esta corrección no debe afectar la funcionalidad del asistente educativo en el dashboard principal.
+Solo debe mejorar la renderización en los nuevos módulos agregados.
+
+✅ Próximos pasos sugeridos
+Corregir primero la visualización en "Ver Recomendaciones".
+
+Posteriormente, corregir la visualización en "Ver Plan de Recuperación" (una vez que el error del filter también se solucione).
+
+Cuando completes estos ajustes, realizaré nuevamente pruebas funcionales para validar la correcta visualización del contenido IA.

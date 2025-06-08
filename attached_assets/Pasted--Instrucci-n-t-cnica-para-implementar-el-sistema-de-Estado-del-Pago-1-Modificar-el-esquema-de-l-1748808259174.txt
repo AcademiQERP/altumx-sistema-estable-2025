@@ -1,0 +1,67 @@
+✅ Instrucción técnica para implementar el sistema de Estado del Pago
+🧩 1. Modificar el esquema de la base de datos
+Agregar un nuevo campo estado a la tabla payments.
+
+Nombre del campo: estado
+
+Tipo de dato: varchar (recomendado) o enum si se desea restringir valores posibles.
+
+Valores aceptados:
+
+pendiente
+
+validando
+
+confirmado
+
+rechazado
+
+cancelado (opcional, para casos de reversión manual o solicitud de baja)
+
+NOTA: Asegurar valor por defecto "pendiente" si no se define al registrar.
+
+⚙️ 2. Implementar lógica automática de actualización de estado
+Al momento de registrar un nuevo pago en el sistema:
+
+Si el método de pago es efectivo:
+
+Asignar estado = "confirmado" inmediatamente, ya que es validado presencialmente.
+
+Si el método de pago es transferencia o tarjeta:
+
+Registrar como estado = "pendiente".
+
+Cambiar a estado = "confirmado" tras validación manual por el administrador (o webhook de terminal bancaria si está disponible).
+
+Opcionalmente usar validando mientras se procesa automáticamente.
+
+Si hay errores en validación, marcar como rechazado.
+
+🎨 3. Reactivar la columna "Estado del Pago" en el historial
+Una vez que los pagos tengan datos reales de estado en la base de datos, reactivar la columna oculta en el módulo de "Historial de Pagos".
+
+Mostrar visualmente el estado con badges de colores para facilitar la interpretación:
+
+Estado	Badge sugerido	Color
+pendiente	🔵 Pendiente	Azul claro
+validando	🟡 Validando	Amarillo
+confirmado	🟢 Confirmado	Verde
+rechazado	🔴 Rechazado	Rojo
+cancelado	⚪ Cancelado (opcional)	Gris claro
+
+Incluir tooltip o texto accesible al pasar el cursor sobre el badge:
+Ej. "Este pago está pendiente de validación por el área administrativa".
+
+🧪 4. Verificación de integridad
+Antes de liberar al entorno de producción:
+
+Validar que el campo estado se registra correctamente con cada nuevo pago.
+
+Simular diferentes métodos de pago y validar transición de estados.
+
+Verificar que el frontend nunca muestre un estado por defecto hardcodeado, sino siempre basado en datos reales.
+
+🔒 Seguridad y estabilidad
+Limitar las transiciones de estado a usuarios con permisos administrativos.
+
+Documentar las reglas de negocio en el repositorio/backend para facilitar mantenimiento.

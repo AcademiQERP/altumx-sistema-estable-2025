@@ -1,0 +1,46 @@
+✅ Instrucción Segura para el Agente – Mejoras Visuales Informe Académico IA (PDF)
+Objetivo: Ajustar el diseño del informe académico PDF para que toda la información quede organizada en una sola hoja, sin solapamientos ni contenido extendido.
+
+🛠️ Cambios Visuales Solicitados
+📦 Reubicar y Redimensionar el Código QR:
+
+Ubicar el código QR en la esquina inferior izquierda del informe.
+
+Reducir el tamaño del QR aproximadamente 30% respecto al tamaño actual.
+
+Alinear correctamente con el texto de validación para que no invada ningún contenido textual.
+
+🧠 Consolidar Fortalezas y Áreas a Fortalecer en un solo bloque:
+
+Unificar ambas secciones bajo el título:
+Resumen de Desempeño Académico
+
+Utilizar el siguiente texto modelo como ejemplo para el contenido (resumen):
+
+Andrea demuestra una sólida comprensión matemática, destacada redacción crítica y participación activa en experimentación científica. Se recomienda reforzar técnicas avanzadas de resolución, ampliar lectura crítica y fomentar investigación independiente.
+
+📏 Optimizar Espaciado Vertical y Márgenes:
+
+Reducir el espaciado entre secciones y márgenes superior e inferior.
+
+Asegurarse de que el documento sea completamente legible en una sola página (A4).
+
+🎯 Encabezado más compacto:
+
+Disminuir el espacio vertical entre el título del informe y la tabla de calificación (8.5 Muy Bueno).
+
+🔍 Ajustar la sección “RECOMENDACIÓN PREDICTIVA POR IA”:
+
+Mantener la sección, pero presentar el contenido en un solo párrafo breve como este:
+
+Con base en el análisis de desempeño de Andrea, se recomienda potenciar su perfil STEM con participación en competencias científicas, programas de robótica e investigación interdisciplinaria. Su desempeño de 8.5 respalda un desarrollo académico prometedor.
+
+🛡️ Modo Seguro Activado:
+No modificar la lógica de generación del informe.
+
+No tocar base de datos ni estructura del backend.
+
+Cambios exclusivamente visuales en el template PDF del informe.
+
+Confirmar que el resultado cabe en una sola hoja y es visualmente limpio y profesional.
+

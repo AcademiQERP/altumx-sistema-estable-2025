@@ -1,0 +1,78 @@
+Por favor, ajusta el PDF del informe de "Ver Recomendaciones" siguiendo exactamente el mismo enfoque de estructura, diseño visual, formato profesional y estilo implementado en el nuevo PDF del "Plan de Recuperación Académica".
+
+Específicamente:
+
+✓ Agrega una portada elegante que incluya:
+
+Nombre del informe ("Informe de Recomendaciones Académicas Personalizado")
+
+Nombre del grupo (ej. "Grupo 1-A")
+
+Nombre del docente
+
+Fecha de generación (mes y año)
+
+✓ Implementa sección de Diagnóstico General del Grupo, mostrando:
+
+Promedio general
+
+Porcentaje de asistencia
+
+Total de estudiantes
+(con el mismo estilo visual de tarjetas utilizadas en el reporte de recuperación)
+
+✓ Organiza la sección de Recomendaciones Académicas de forma clara:
+
+Título de la sección: "📚 Recomendaciones Académicas"
+
+Utilizar tarjetas o bloques visuales diferenciados para:
+
+"Estudiantes en Riesgo" (icono naranja de advertencia)
+
+"Estudiantes de Buen Desempeño" (icono verde de logro)
+
+Formatear las recomendaciones con viñetas (•) y espaciado uniforme (12px)
+
+✓ Corrige y mantiene flujo de contenido:
+
+Evitar páginas en blanco intermedias
+
+Usar paginación correcta
+
+Adaptar automáticamente el tamaño de las tarjetas según el contenido real
+
+✓ Sección de Firmas:
+
+Firma del docente
+
+Firma de coordinador académico
+
+Firma del director académico
+
+Pie de página: "Este documento es parte del proceso de seguimiento académico institucional"
+
+✓ Estilo Visual:
+
+Mantener el mismo esquema de colores institucionales (#1F3C88, #5893D4, #F0F2F5)
+
+Mantener bordes redondeados en todos los contenedores
+
+Consistencia visual total con el Plan de Recuperación
+
+✓ Nota Importante:
+
+Validar que si el grupo tiene datos suficientes (por ejemplo, alumnos en riesgo y de buen desempeño), el sistema los divida correctamente en las tarjetas.
+
+Si solo hay estudiantes de un tipo, mostrar únicamente la sección correspondiente.
+
+🎨 Mockup de Referencia Visual
+Este es el concepto de cómo debe lucir:
+
+Primera página: portada limpia con título, docente, grupo, periodo y diagnóstico general.
+
+Segunda página: título de sección + tarjetas de recomendaciones por tipo de estudiante (riesgo o buen desempeño).
+
+Última página: sección de firmas con diseño institucional.
+
+(Ya he generado y enviado un mockup anterior que puedes mostrar al agente como inspiración visual.)
+

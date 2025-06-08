@@ -1,0 +1,86 @@
+✅ Instrucción para el Agente – Activar funcionalidades de botones en el Dashboard Académico
+🎯 Objetivo
+Activar de forma controlada y segura la funcionalidad de los siguientes botones del Dashboard Académico:
+
+🧩 Botón “Filtrar”
+
+🗂️ Botón “Exportar”
+
+🧾 Botón “Generar boletas pendientes”
+
+🔘 1. Botón “Filtrar”
+Funcionalidad esperada:
+
+Al hacer clic, debe abrirse un modal o panel lateral con filtros visuales, sin recargar la vista.
+
+Filtros sugeridos (solo visual, no editar lógica de backend):
+
+Grupo (ej: 3°A, 4°B)
+
+Nivel (Primaria, Secundaria, etc.)
+
+Periodo o trimestre activo
+
+Al aplicar un filtro, los datos visibles en el dashboard se deben actualizar dinámicamente usando los endpoints ya existentes (sin crear lógica nueva).
+
+❗ Seguridad requerida:
+
+No modificar las consultas actuales si no hay filtros activos.
+
+No crear nuevos endpoints ni alterar consultas de backend.
+
+📤 2. Botón “Exportar”
+Funcionalidad esperada:
+
+Al hacer clic, mostrar una opción para exportar el contenido del dashboard como:
+
+PDF (preferido)
+
+o Excel (si es viable)
+
+El PDF debe incluir:
+
+Indicadores principales
+
+Gráfico de asistencia
+
+Materias con bajo rendimiento
+
+Estado de boletas
+
+El archivo debe contener el nombre del módulo (“Dashboard Académico”), la fecha actual y el nombre del usuario que genera el reporte.
+
+❗ Seguridad requerida:
+
+No incluir datos sensibles ni personales (como CURP o ID interno).
+
+No permitir exportación si no hay datos disponibles (mostrar mensaje: “No hay información para exportar”).
+
+🧾 3. Botón “Generar boletas pendientes”
+Funcionalidad esperada:
+
+Al hacer clic, mostrar una confirmación tipo modal:
+“¿Deseas generar las boletas faltantes para los estudiantes del periodo actual?”
+
+Si el usuario confirma, debe ejecutarse la lógica ya existente (endpoint o función en backend) que genera las boletas pendientes del ciclo activo.
+
+❗ Seguridad requerida:
+
+Verificar permisos del usuario: Solo administradores o coordinadores pueden ejecutar esta acción.
+
+No modificar la lógica de generación de boletas ya existente, solo vincular el botón correctamente.
+
+🧠 Consideraciones UX
+Añadir feedback visual al hacer clic en cada botón (spinner, alerta de confirmación, toast de éxito o error).
+
+Validar que los botones funcionen tanto en desktop como en pantallas móviles.
+
+✅ Confirmación esperada
+Una vez implementadas las funciones, por favor:
+
+Enviar una captura de pantalla del dashboard con los botones activos.
+
+Confirmar que no se ha modificado ningún endpoint ni lógica crítica.
+
+Indicar si la exportación está limitada a PDF, Excel o ambos.
+

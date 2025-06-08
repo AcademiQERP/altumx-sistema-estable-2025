@@ -1,0 +1,67 @@
+🛠️ Instrucción para el agente: Implementar filtros personalizados para la generación masiva de reportes
+Objetivo: Añadir un sistema de filtros previos que permita al usuario elegir exactamente qué reportes desea incluir al generar el archivo ZIP con boletas y planes de recuperación académica.
+
+✅ Cambios solicitados
+1. Agregar panel de filtros antes de la generación masiva
+Ubicar un panel o modal antes de ejecutar el botón 📥 Generar reportes del grupo, con las siguientes opciones seleccionables por el usuario (checkboxes):
+
+✅ Incluir solo alumnos con evaluación completa (27/27 subtemas)
+
+✅ Incluir alumnos que requieren plan de recuperación
+
+✅ Incluir alumnos que no requieren plan de recuperación
+
+✅ Incluir solo alumnos con promedio general mayor a:
+(input numérico, por defecto: 0.0)
+
+2. Aplicar filtros antes de generar el ZIP
+Solo incluir en el archivo ZIP final:
+
+Los alumnos que cumplan todas las condiciones seleccionadas
+
+Omitir alumnos de prueba (ID > 5) como ya se hace actualmente
+
+3. Mostrar resumen antes de la generación
+Antes de ejecutar la descarga, mostrar un resumen en pantalla con:
+
+Total de alumnos incluidos en la generación
+
+Número de boletas a generar
+
+Número de planes de recuperación
+
+Promedio general del grupo (de los incluidos)
+
+Este paso sirve como confirmación previa al usuario.
+
+4. No modificar la estructura del ZIP
+Mantener:
+
+Carpeta boletas_academicas/
+
+Carpeta planes_recuperacion/
+
+Archivo README.txt con descripción
+
+Archivo index.html interactivo con navegación
+
+Solo que el contenido ahora será filtrado según los criterios elegidos.
+
+5. Accesibilidad por roles
+El sistema de filtros debe estar disponible para:
+
+Docentes
+
+Dirección académica
+
+Administradores
+
+✅ Resultado esperado
+Al presionar el botón 📥 Generar reportes del grupo, se despliega el panel de filtros.
+
+El sistema genera el ZIP solo con los alumnos filtrados.
+
+El archivo index.html y los enlaces respetan los mismos criterios de selección.
+
+Se presenta un resumen antes de proceder para validar la acción.
+

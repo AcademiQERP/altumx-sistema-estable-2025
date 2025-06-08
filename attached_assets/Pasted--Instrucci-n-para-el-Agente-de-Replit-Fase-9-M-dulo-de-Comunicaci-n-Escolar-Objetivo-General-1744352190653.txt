@@ -1,0 +1,111 @@
+🧠 Instrucción para el Agente de Replit – Fase 9: Módulo de Comunicación Escolar
+🧱 Objetivo General:
+Implementar un módulo de comunicación que funcione como puente entre la escuela, docentes y padres de familia. Debe incluir mensajería interna, sistema de notificaciones y una agenda escolar interactiva. Este módulo será accesible desde los portales de administrador, docente y padres, con contenidos personalizados por rol.
+
+1. 🔐 Rutas y accesos por rol:
+Administrador:
+
+Acceso total a bandeja de entrada, agenda, creación y envío de avisos/circulares.
+
+Puede enviar mensajes masivos o individuales.
+
+Docente:
+
+Puede comunicarse con padres de alumnos asignados.
+
+Puede recibir mensajes de administración y padres.
+
+Puede visualizar agenda escolar.
+
+Padre de Familia:
+
+Puede ver avisos escolares, agenda y mensajes individuales enviados por docentes/administración.
+
+Puede responder mensajes.
+
+2. 📦 Estructura de base de datos (Supabase):
+Crear las siguientes tablas:
+
+messages
+Campo	Tipo	Descripción
+id	UUID	Identificador único del mensaje
+sender_id	UUID	ID del usuario que envía el mensaje
+receiver_id	UUID	ID del usuario que recibe el mensaje
+subject	Text	Asunto del mensaje
+body	Text	Contenido completo del mensaje
+priority	Enum	('alta', 'media', 'baja') según IA
+is_read	Boolean	Estado de lectura
+created_at	Timestamp	Fecha y hora de envío
+school_announcements
+Campo	Tipo	Descripción
+id	UUID	Identificador único
+title	Text	Título del aviso escolar
+content	Text	Contenido del aviso
+target_roles	Text[]	['padres', 'docentes', 'todos']
+scheduled_date	Date	Fecha programada de publicación
+created_by	UUID	ID del administrador que lo redactó
+notifications
+Campo	Tipo	Descripción
+id	UUID	ID de la notificación
+user_id	UUID	Usuario destinatario
+message	Text	Contenido breve de la notificación
+type	Enum	('mensaje', 'evento', 'recordatorio')
+is_read	Boolean	Estado de lectura
+created_at	Timestamp	Fecha y hora
+calendar_events
+Campo	Tipo	Descripción
+id	UUID	ID del evento
+title	Text	Nombre del evento
+description	Text	Detalles del evento
+start_date	Date	Fecha de inicio
+end_date	Date	Fecha de finalización (opcional)
+created_by	UUID	Usuario que lo creó
+3. 💻 Interfaz de usuario
+📬 Mensajería
+Componente de bandeja de entrada y detalle de conversación.
+
+Redacción de nuevo mensaje con selector de destinatario.
+
+Filtros por remitente, prioridad, fecha.
+
+Etiquetas automáticas: "Alta Prioridad", "Recordatorio", "Urgente".
+
+📢 Notificaciones
+Bell icon en navbar con dropdown de últimas 5 notificaciones.
+
+Página de historial completo de notificaciones.
+
+Sistema de alertas push/email/WhatsApp (dummy).
+
+📅 Agenda Escolar
+Vista calendario con eventos visibles por día/semana/mes.
+
+Cada evento muestra detalles en modal emergente.
+
+Posibilidad de añadir recordatorios con notificaciones.
+
+4. 🤖 Integración de IA (Lovable.dev)
+Agregar los siguientes prompts al agente IA:
+🧠 Redactor de Circulares y Avisos
+"Redacta una circular dirigida a [padres/docentes] con tono [formal/informativo] sobre el tema [tema] para ser enviada el [fecha]."
+
+📢 Clasificador de Prioridad
+"Clasifica este mensaje en una prioridad alta, media o baja: [contenido del mensaje]"
+
+💡 Resumen Automático de Conversaciones
+"Resume esta conversación destacando temas tratados, acuerdos y puntos pendientes: [historial de mensajes]"
+
+5. ✅ Validaciones necesarias
+JWT debe enviarse con cada consulta del usuario (padre/docente/admin).
+
+Verificar que el usuario solo puede ver mensajes permitidos por su rol.
+
+Manejar errores de red, tokens vencidos y respuestas vacías.
+
+6. 📌 Extras
+Mensaje de bienvenida al abrir el módulo por primera vez.
+
+Etiquetas de estado para mensajes: “Nuevo”, “Respondido”, “Archivado”.
+
+Posibilidad de archivar mensajes o filtrarlos por categoría.
+

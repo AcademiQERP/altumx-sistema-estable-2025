@@ -1,0 +1,70 @@
+🔧 Instrucciones UX/UI para el Agente – Módulo de Boletas Académicas (/boletas)
+🥇 Paso 1: Mejorar el buscador de alumnos
+Reemplaza el campo actual por un input con autocompletado (typeahead).
+
+La búsqueda debe funcionar tanto por nombre completo como por CURP.
+
+El placeholder debe decir:
+🔍 Buscar por nombre o CURP...
+
+⚠️ No requiere modificación de backend, solo adaptación visual y lógica en frontend.
+
+🥈 Paso 2: Renombrar y mejorar el botón “Ver Boleta”
+Cambia el texto de Ver Boleta por:
+📄 Consultar Boleta
+
+Agrega un tooltip al pasar el cursor:
+"Haz clic para consultar y exportar la boleta académica del alumno"
+
+✅ No cambia funcionalidad. Es solo una mejora visual y semántica.
+
+🥉 Paso 3: Agregar ícono de descarga (visual, no funcional aún)
+A la derecha del botón 📄 Consultar Boleta, añade un botón ícono:
+⬇️ (ícono de descarga)
+
+Tooltip: "Descargar como PDF (Próximamente)"
+
+El botón debe estar deshabilitado por ahora.
+
+🔖 Marcar como: Función próxima
+
+📚 Paso 4: Habilitar ordenamiento por columnas
+Haz que los encabezados de la tabla (Estudiante, Grupo, Nivel) sean clicables.
+
+Implementa orden ascendente/descendente.
+
+Muestra flechas ▲▼ al lado del título activo.
+
+Ejemplo:
+Estudiante ▲ (ordenado ascendente)
+
+✅ Sin alterar datos, solo requiere lógica de frontend para renderizado ordenado.
+
+🎯 Paso 5: Feedback visual al hacer clic
+Cuando el docente haga clic en Consultar Boleta, resalta brevemente esa fila (ej. fondo azul claro o borde izquierdo azul).
+
+Esto se puede resetear después de unos segundos o al hacer clic en otra.
+
+✅ Mejora la interacción sin afectar estructura.
+
+🧪 Paso 6: Filtros avanzados (mostrar como experimental)
+Agrega un botón colapsable encima de la tabla:
+
+Texto: 🔍 Filtros Avanzados (Función experimental)
+
+Al expandirse, muestra controles no funcionales aún:
+
+Select de grupo
+
+Select de nivel
+
+Select de estado académico
+
+⚠️ No se conecta todavía con la lógica de búsqueda, solo es una preparación visual para versiones futuras.
+
+✅ Consideraciones técnicas
+No hay cambios en la base de datos.
+
+No se requiere integración adicional en esta fase.
+
+Las funciones nuevas están marcadas claramente como experimentales o futuras.

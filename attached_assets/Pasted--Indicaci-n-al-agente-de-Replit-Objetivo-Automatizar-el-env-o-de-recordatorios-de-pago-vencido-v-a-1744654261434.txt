@@ -1,0 +1,67 @@
+✅ Indicación al agente de Replit
+Objetivo: Automatizar el envío de recordatorios de pago vencido vía email para padres de familia, ejecutándose todos los días (o al inicio de sesión del admin si aún no se usa cron).
+
+🧠 Funcionalidad general
+Crear un proceso automatizado que:
+
+Revise diariamente si hay adeudos vencidos o por vencer en los próximos 3 días.
+
+Clasifique a los alumnos por nivel de riesgo de pago.
+
+Envíe un correo personalizado a los tutores responsables.
+
+Registre el envío en la tabla email_logs o una nueva tabla payment_reminders_sent.
+
+🧩 Requisitos técnicos
+🔁 Agendador automático (opciones):
+✅ Opción A (simple): Ejecutar la lógica al iniciar sesión como administrador (temporal).
+
+🔄 Opción B (ideal): Usar cron en el backend con node-cron para ejecutar diariamente a las 7:00 AM.
+
+📤 Lógica de envío:
+Utilizar el mismo servicio de email ya implementado (SendGrid o EmailJS).
+
+Validar que el tutor tenga un correo electrónico registrado.
+
+Evitar enviar recordatorios duplicados el mismo día al mismo alumno.
+
+🧾 Contenido del email:
+Nombre del alumno.
+
+Monto total pendiente.
+
+Concepto y fecha de vencimiento más próxima.
+
+Nivel de riesgo.
+
+Frase de seguimiento como:
+"Este es un recordatorio automático del sistema EduMex ERP. Si ya ha realizado su pago, favor de ignorar este mensaje."
+
+🗂 Registro del envío:
+Crear o usar tabla como esta:
+
+alumnoId	tutorId	fechaEnvio	riesgo	estado	canal
+1	5	2025-04-17	Alto	enviado	correo
+Registrar también errores si los hubiera.
+
+💻 Frontend adicional (opcional):
+En la ruta /admin/recordatorios, agregar:
+
+✅ Indicador: “Última ejecución: [fecha y hora]”
+
+📈 Conteo: “Se enviaron X correos exitosamente”
+
+📄 Tabla de registros enviados
+
+✅ Resultado esperado
+Cada mañana o cada sesión del admin, el sistema:
+
+Detecta alumnos con riesgo o pagos vencidos
+
+Envía correos automáticos a sus tutores
+
+Registra los resultados para seguimiento
+
+Evita duplicados y errores de lógica
+
+¿Te gustaría que preparemos también el contenido del email como plantilla para que el agente lo use directamente?

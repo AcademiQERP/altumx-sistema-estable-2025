@@ -1,0 +1,51 @@
+✅ Instrucción al Agente: Optimización del Flujo UX/UI en el Módulo de Pagos
+Objetivo:
+Mejorar la experiencia de usuario en el módulo de pagos, priorizando el registro de pagos presenciales en caja, minimizando pasos innecesarios y facilitando la revisión del historial sin abandonar el flujo.
+
+🛠️ Cambios solicitados
+Establecer /payments/new como pantalla inicial del módulo de pagos
+
+Asegurarse de que el módulo redirija automáticamente a /payments/new cuando se acceda desde el menú lateral (Pagos).
+
+Mantener acceso manual a la vista /pagos (historial completo) desde enlaces o accesos internos.
+
+Agregar resumen de historial de pagos por estudiante en el formulario /payments/new
+
+Cuando se seleccione un estudiante:
+
+Mostrar debajo del campo del estudiante una pequeña sección tipo “Historial reciente de pagos”.
+
+Incluir: concepto, monto, fecha y método de pago (últimos 2 o 3 pagos).
+
+Esta sección debe cargarse dinámicamente y mantenerse ligera visualmente.
+
+Agregar botón discreto para ver historial completo de ese estudiante
+
+Debajo del resumen de historial reciente, añadir botón/enlace:
+Ver historial completo de pagos
+
+Al hacer clic, redirige a /pagos?studentId=ID, precargando el filtro para ese estudiante.
+
+Mantener la vista /pagos como secundaria
+
+No modificar su funcionalidad actual.
+
+Únicamente ajustar si es necesario el filtro por estudiante (studentId) para que funcione con el acceso directo desde /payments/new.
+
+✅ Reglas clave para la implementación
+No eliminar la vista /pagos, solo modificar el punto de entrada inicial al módulo.
+
+Todos los cambios deben ser visuales y seguros; no modificar lógicas existentes de pagos o adeudos.
+
+Verificar que los componentes de resumen no impacten el rendimiento del formulario.
+
+Mantener la estética actual (Cards, tipografía, espaciado).
+
+🧪 Validación esperada
+Al acceder al menú lateral > Pagos, se debe abrir directamente /payments/new.
+
+Al seleccionar un estudiante con pagos previos, deben mostrarse sus últimos pagos justo debajo del campo.
+
+El botón “Ver historial completo” debe llevar correctamente a /pagos filtrando por ese estudiante.
+
+Todo debe funcionar correctamente sin afectar la lógica de registro de pagos actual.

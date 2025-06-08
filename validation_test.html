@@ -1,0 +1,146 @@
+
+      <html>
+        <head>
+          <title>Documento Válido - AcademiQ</title>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            body { 
+              font-family: Arial, sans-serif; 
+              margin: 0; 
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              min-height: 100vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .container { 
+              background: white; 
+              padding: 40px; 
+              border-radius: 12px; 
+              box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+              max-width: 500px;
+              width: 90%;
+            }
+            .header {
+              text-align: center;
+              margin-bottom: 30px;
+            }
+            .success { 
+              color: #28a745; 
+              font-size: 24px;
+              font-weight: bold;
+            }
+            .info-row {
+              display: flex;
+              justify-content: space-between;
+              margin: 15px 0;
+              padding: 10px;
+              background: #f8f9fa;
+              border-radius: 6px;
+            }
+            .label {
+              font-weight: bold;
+              color: #495057;
+            }
+            .value {
+              color: #212529;
+            }
+            .amount {
+              font-size: 20px;
+              font-weight: bold;
+              color: #28a745;
+            }
+            .footer {
+              margin-top: 30px;
+              text-align: center;
+              padding-top: 20px;
+              border-top: 1px solid #dee2e6;
+            }
+            .download-btn {
+              background: #007bff;
+              color: white;
+              padding: 12px 24px;
+              text-decoration: none;
+              border-radius: 6px;
+              display: inline-block;
+              margin: 10px 0;
+              transition: background 0.3s;
+            }
+            .download-btn:hover {
+              background: #0056b3;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <div class="success">✅ Documento Válido</div>
+              <p style="color: #6c757d; margin: 10px 0;">Recibo de Pago Verificado</p>
+            </div>
+            
+            <div class="info-row">
+              <span class="label">Recibo No.:</span>
+              <span class="value">#15</span>
+            </div>
+            
+            <div class="info-row">
+              <span class="label">Estudiante:</span>
+              <span class="value">Alexa Fernanda Cebreros Contreras</span>
+            </div>
+            
+            <div class="info-row">
+              <span class="label">Concepto:</span>
+              <span class="value">undefined</span>
+            </div>
+            
+            <div class="info-row">
+              <span class="label">Fecha de Pago:</span>
+              <span class="value">1 de junio de 2025</span>
+            </div>
+            
+            <div class="info-row">
+              <span class="label">Monto:</span>
+              <span class="value amount">$5,000.00</span>
+            </div>
+            
+            <div class="info-row">
+              <span class="label">Método de Pago:</span>
+              <span class="value">Transferencia Bancaria</span>
+            </div>
+            
+            <div class="footer">
+              <a href="/api/padres/recibo/15" class="download-btn" target="_blank">
+                📄 Descargar Recibo PDF
+              </a>
+              <div style="background: #e3f2fd; padding: 15px; border-radius: 6px; margin: 20px 0;">
+                <strong>Seguridad Verificada:</strong> Este documento ha sido validado mediante tecnología de firma digital HMAC-SHA256. La autenticidad está garantizada.
+              </div>
+              
+          <div style="background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 15px; border-radius: 6px; margin: 20px 0;">
+            ⚠️ <strong>Verificación de Integridad:</strong> No se encontró registro de integridad para este documento
+          </div>
+        
+              
+          <div style="background: #e7f3ff; border: 1px solid #b3d9ff; color: #0c5460; padding: 15px; border-radius: 6px; margin: 20px 0;">
+            📘 <strong>También está disponible el informe académico personalizado del estudiante.</strong>
+            <br><small>Documento generado específicamente para este período de pago</small>
+            <div style="margin-top: 15px;">
+              <a href="/api/informes/download/15" 
+                 style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; transition: background 0.3s;"
+                 onmouseover="this.style.background='#0056b3'"
+                 onmouseout="this.style.background='#007bff'">
+                📥 Ver Informe Académico
+              </a>
+            </div>
+          </div>
+        
+              <small style="color: #6c757d;">
+                Verificado por Sistema AcademiQ<br>
+                Validado el 2/6/2025, 12:56:15 a.m.
+              </small>
+            </div>
+          </div>
+        </body>
+      </html>
+    

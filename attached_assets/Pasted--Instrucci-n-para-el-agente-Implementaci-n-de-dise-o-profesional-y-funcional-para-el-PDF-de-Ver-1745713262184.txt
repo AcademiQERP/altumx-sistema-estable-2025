@@ -1,0 +1,68 @@
+🛠️ Instrucción para el agente:
+Implementación de diseño profesional y funcional para el PDF de "Ver recomendaciones"
+
+Diseño y Estilo General:
+
+Aplicar la misma línea gráfica y estructura visual que el Plan de Recuperación Académico.
+
+Usar los colores institucionales ya definidos: #1F3C88, #5893D4, #F0F2F5.
+
+Mantener la estética de tarjetas limpias, bordes redondeados (cornerRadius), y espaciado balanceado entre secciones.
+
+Asegurar consistencia en los márgenes, encabezados, subtítulos y cuerpo de texto.
+
+Datos Reales en el Informe:
+
+Extraer dinámicamente las recomendaciones personalizadas para cada estudiante basadas en su desempeño académico real (calificaciones, asistencia, materias críticas, etc.).
+
+Mostrar las recomendaciones clasificadas por nivel de desempeño:
+
+📚 Estudiantes Críticos
+
+⚠️ Estudiantes en Riesgo
+
+🌟 Estudiantes con Buen Desempeño
+
+Cada sección debe mostrar recomendaciones claras y específicas, adaptadas a cada categoría de estudiantes.
+
+Estructura del PDF:
+
+Portada:
+
+Título: "Informe de Recomendaciones Académicas Personalizado"
+
+Nombre del grupo, nombre del profesor, periodo y fecha de generación.
+
+Diagnóstico del Grupo (opcional breve):
+
+Promedio general, porcentaje de asistencia y número de estudiantes.
+
+Recomendaciones Individuales o Grupales:
+
+Una sección por categoría (Crítico, Riesgo, Buen Desempeño).
+
+Formato de listas con viñetas ordenadas, iconografía de apoyo y subrayado de puntos clave.
+
+Conclusión final:
+
+Mensaje motivador general basado en el rendimiento del grupo.
+
+Firma de Conformidad:
+
+Espacio para firma del docente y coordinación académica.
+
+Contenido dinámico y adaptativo:
+
+Asegurarse de que las tarjetas y bloques se ajusten automáticamente a la cantidad de texto (sin recortes ni solapamientos).
+
+Evitar mostrar tarjetas vacías si no hay recomendaciones en alguna categoría.
+
+Aspectos Técnicos Adicionales:
+
+Manejo de "Alumno Test" o registros ficticios: excluirlos de la generación del PDF de recomendaciones para no contaminar los resultados.
+
+Corrección de cualquier error de superposición de fondo, tamaño de las tarjetas y formato de listas detectado en experiencias anteriores.
+
+📌 Nota para el agente:
+➡️ Referencia visual: Utilizar como base el último PDF corregido y aprobado del Plan de Recuperación Académica (versión con corrección de fondo blanco, viñetas correctas, estructura modular y diseño UX).
+

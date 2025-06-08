@@ -1,0 +1,63 @@
+✅ Instrucción para el Agente – Refinamientos UX en el Dashboard Principal del Administrador
+🎯 Objetivo General
+Mejorar la experiencia visual y la comprensión del Dashboard Principal mediante dos ajustes visuales seguros:
+
+Colores dinámicos en el indicador de Asistencia Promedio
+
+Personalización visual (no funcional) del bloque de Acciones Rápidas
+
+🟡 1. Indicador de Asistencia Promedio con Colores Adaptativos
+Ubicación: Tarjeta superior derecha (actualmente muestra 87.3%).
+
+🔧 Cambio solicitado (visual únicamente):
+
+Ajustar el color del ícono o fondo de la tarjeta según el valor mostrado:
+
+Rango de valor	Color sugerido	Significado
+≥ 90%	🟢 Verde claro	Excelente asistencia
+80% - 89%	🟡 Amarillo	Advertencia leve
+< 80%	🔴 Rojo claro	Asistencia baja
+
+📌 El valor debe mantenerse textual (ej. “87.3%”), solo cambia el color del ícono o del contorno de la tarjeta (no todo el fondo).
+
+🔒 Reglas de seguridad:
+
+No modificar cómo se calcula el valor de asistencia.
+
+No alterar el diseño ni la posición de la tarjeta.
+
+Solo cambiar el color en función del valor visible.
+
+✅ Tooltip adicional sugerido (al pasar el cursor):
+
+“Promedio de asistencia registrado en los últimos 7 días.”
+
+⚙️ 2. Activar visualmente el botón “Personalizar” en Acciones Rápidas
+Ubicación: Sección “Acciones Rápidas” (debajo de los indicadores principales).
+
+🔧 Comportamiento solicitado:
+
+Al hacer clic en el botón “Personalizar”, mostrar un modal o panel lateral simulado con el siguiente texto:
+
+🧩 “Esta función permitirá reordenar u ocultar accesos según tus preferencias. Próximamente disponible.”
+
+El modal puede tener un solo botón de cierre ("Cerrar") y no necesita tener funcionalidad real por ahora.
+
+🔒 Reglas de seguridad:
+
+No modificar la lógica de los accesos rápidos.
+
+No permitir guardar cambios aún (modo de solo vista).
+
+No alterar el flujo de carga del dashboard.
+
+🎨 Estilo sugerido para el modal:
+
+Ícono ⚙️ en encabezado
+
+Título: “Personaliza tus accesos rápidos”
+
+Cuerpo: Mensaje de funcionalidad futura
+
+Botón: “Cerrar”
+

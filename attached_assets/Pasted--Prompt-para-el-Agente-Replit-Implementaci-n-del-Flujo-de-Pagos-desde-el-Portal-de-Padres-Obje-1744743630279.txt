@@ -1,0 +1,65 @@
+✅ Prompt para el Agente Replit – Implementación del Flujo de Pagos desde el Portal de Padres
+🎯 Objetivo: Habilitar la opción para que los padres de familia puedan realizar el pago de colegiaturas, inscripciones y otros conceptos directamente desde la sección de Estado de Cuenta en el portal de padres.
+
+🧩 1. Nueva funcionalidad a implementar
+Añadir un botón "Pagar ahora" al lado de cada concepto de pago con estado pendiente en la sección /portal-padres/estado-cuenta.
+
+Al hacer clic, abrir un modal de confirmación de pago, mostrando:
+
+Nombre del alumno
+
+Concepto (ej. “Colegiatura Abril 2025”)
+
+Monto total
+
+Fecha límite
+
+Método de pago (opciones: Tarjeta de débito/crédito, Transferencia, SPEI)
+
+💳 2. Proceso de pago
+Integrar con [Stripe / Conekta / OpenPay] (elige el gateway más adecuado o simula el flujo con un endpoint temporal de prueba).
+
+Validar el pago en frontend.
+
+Registrar el pago en la base de datos en la tabla pagos con:
+
+ID del usuario (padre/tutor)
+
+ID del alumno
+
+Concepto pagado
+
+Fecha del pago
+
+Monto pagado
+
+Método
+
+Estado: completado
+
+📄 3. Recibo y actualización automática
+Una vez realizado el pago:
+
+Cambiar el estado del concepto a pagado en adeudos.
+
+Generar un recibo PDF con folio único, similar a los ya generados en el sistema.
+
+Enviar el recibo al email del tutor registrado.
+
+Mostrar confirmación en pantalla: "✅ Pago realizado correctamente. Recibo enviado al correo."
+
+🧠 4. IA contextual (si ya está activada)
+Si el usuario entra al portal y tiene conceptos pendientes:
+
+Sugerir mediante el asistente contextual:
+"Hola, notamos que tienes pagos pendientes. ¿Te gustaría saldar el adeudo de Ana García por $4200 correspondiente a abril?"
+
+Botón: [Pagar ahora] → lo redirige al modal de pago directamente.
+
+🧪 5. Ambiente de pruebas
+Inicia usando un entorno de prueba para la pasarela de pagos.
+
+Simula los métodos y verifica que se genera el PDF, se actualiza el estado y se registra correctamente el movimiento.
+
+🎁 Bonus
+También puedes preparar una API interna tipo /api/pagos/procesar para recibir y registrar los pagos, y dejarla lista para integrarse después con una app móvil o el asistente IA.

@@ -1,0 +1,46 @@
+✅ Instrucción Final para el Agente: Optimizar visualmente el Dashboard Financiero (🛠️ sin modificar lógica)
+🎯 Objetivo:
+Realizar mejoras exclusivamente visuales y de UX/UI al nuevo dashboard del módulo de Finanzas con el fin de optimizar su legibilidad, jerarquía y utilidad práctica para usuarios administrativos. No modificar ninguna lógica funcional ni estructura de datos.
+
+🔧 Ajustes Visuales Sugeridos (seguros)
+1. Mejorar jerarquía visual en tarjetas superiores:
+Aumentar levemente el tamaño de fuente de los títulos de las tarjetas (ej. “Ingresos del Periodo”, “Pagos Pendientes”).
+
+Usar colores de fondo más suaves (pasteles claros) para reducir contraste y mejorar estética profesional.
+
+Alinear verticalmente los valores (ej. $23,994) y su subtítulo ("Pagos recibidos y registrados") con mayor separación visual.
+
+2. Refinar el gráfico “Ingresos vs Adeudos”:
+Añadir un tooltip al pasar el mouse que diga:
+"Ingresos: $XX,XXX" y "Adeudos: $XX,XXX"
+
+Mostrar totales debajo del eje horizontal como refuerzo textual si es posible (opcional).
+
+3. Mejorar tabla “Últimos Pagos Registrados” y “Próximos Vencimientos”:
+Usar íconos pequeños al inicio de cada fila para representar tipo de pago o estado (ej. 💳, 🧾, 🔔).
+
+Añadir encabezados fijos (por ejemplo: Alumno, Fecha, Método, Monto).
+
+Limitar verticalmente a 5 filas visibles y permitir scroll si hay más registros (para evitar sobrecarga visual).
+
+4. Clasificación de Riesgo:
+Añadir pequeñas etiquetas con color bajo el gráfico tipo leyenda para cada segmento ("Riesgo Alto", "Riesgo Medio", "Sin Riesgo").
+
+Incluir número total de alumnos por categoría, visible bajo el gráfico.
+
+5. Acceso Rápido a Submódulos (bloque inferior):
+Incluir íconos en cada botón (ya están) y aumentar ligeramente el padding interno para mejor balance visual.
+
+Añadir tooltip al pasar el cursor sobre cada botón (ej. "Ir a Pagos", "Ver Adeudos", etc.)
+
+Considerar añadir un botón adicional: "Resumen General PDF" si se desea una futura exportación global.
+
+📋 Seguridad del Cambio:
+No modificar ninguna lógica existente ni endpoint funcional.
+
+No alterar el comportamiento de los submódulos (Pagos, Adeudos, Clasificación, etc.).
+
+Estos cambios deben ser 100% visuales, encapsulados en el dashboard únicamente.
+
+Respetar la estructura y estilo general de AcademiQ.
+

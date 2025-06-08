@@ -1,0 +1,66 @@
+✅ Instrucción para el Agente – Acceso Seguro del Administrador a Portales de Profesor y Padre de Familia
+🎯 Objetivo
+Permitir que el Administrador General pueda acceder en modo visual a los portales del Profesor y del Padre de Familia, exclusivamente con fines de supervisión, validación y soporte.
+Este acceso debe ser completamente seguro, sin alterar lógica funcional, sin cambiar sesiones activas y sin afectar permisos reales.
+
+🧩 Comportamiento esperado
+Desde el Dashboard del Administrador, agregar una sección titulada:
+
+🔍 Explorar otros portales
+
+Con dos botones visibles:
+
+👨‍🏫 Ver como Profesor
+
+👨‍👧 Ver como Padre de Familia
+
+🧪 Al hacer clic en cualquiera de ellos:
+Mostrar un modal con un campo de búsqueda para seleccionar el usuario a visualizar:
+
+En el caso de profesores: búsqueda por nombre.
+
+En el caso de padres: búsqueda por alumno o padre vinculado.
+
+Una vez seleccionado, abrir una nueva pestaña del navegador con la siguiente vista:
+
+/vista-simulada/profesor/:id
+/vista-simulada/padre/:id
+
+Estas rutas deben cargar el frontend del portal seleccionado en modo lectura, usando únicamente los datos visibles para ese usuario, pero sin cambiar la sesión actual del administrador.
+
+🔐 Reglas de Seguridad (Obligatorias)
+Restricción	Justificación
+❌ No usar login real del profesor o padre	Evita conflictos de sesión y errores de permisos
+✅ Simular visualización usando solo props, no autenticar	Seguridad total: el admin solo “ve”, no interactúa como si fuera ese usuario
+❌ No permitir acciones en el portal emulado	Ej. no enviar tareas, no marcar asistencia, no escribir mensajes
+✅ Mostrar un banner superior permanente	Texto sugerido:
+
+“🔒 Vista simulada. No puedes realizar acciones en esta vista. Estás viendo el portal como [Nombre Usuario Emulado]”
+
+| ❌ No alterar la lógica de rutas protegidas o autenticación | El administrador solo accede a estas vistas específicas, no a las rutas reales de los portales por autenticación directa |
+
+📌 UX/Visual sugerido
+Modal compacto, con buscador y botón “Ver como…”
+
+Vista abierta en nueva pestaña, con las acciones deshabilitadas (grises o no clicables)
+
+Banner fijo en la parte superior del portal emulado
+
+Color o fondo ligeramente diferente (gris claro) para enfatizar que es una vista administrativa
+
+✅ Confirmación esperada del agente
+Al finalizar la implementación:
+
+Confirmar que las vistas simuladas no permiten editar ni guardar ningún dato.
+
+Confirmar que la sesión activa del administrador no cambia al acceder a las vistas.
+
+Enviar captura de pantalla de:
+
+El modal de selección
+
+El portal del profesor emulado
+
+El portal del padre emulado
+
+El banner de advertencia en cada uno

@@ -1,0 +1,74 @@
+ Instrucción al Agente: Mejoras al Módulo de Calificaciones del Profesor
+Hemos validado que el registro individual de calificaciones ya funciona correctamente. Ahora deseo implementar una serie de mejoras para fortalecer y profesionalizar esta funcionalidad. A continuación, te detallo los siguientes pasos:
+
+1. ✅ Carga Masiva desde Archivo (Excel o CSV)
+Implementar la opción para que el profesor pueda importar calificaciones en lote desde un archivo CSV o Excel.
+
+El archivo debe incluir:
+
+Nombre del estudiante
+
+Calificación (0 a 10)
+
+Rubro
+
+Materia
+
+Periodo
+
+Validar que:
+
+Solo se acepten archivos .csv o .xlsx
+
+Las calificaciones estén dentro del rango permitido (0–10)
+
+Se verifique coincidencia de nombres con alumnos del grupo seleccionado
+
+Mostrar mensaje de validación detallado por cada fila fallida.
+
+2. 💬 Campo de Comentario/Retroalimentación
+Añadir un campo opcional comentario junto a cada calificación.
+
+Este comentario debe poder ser consultado por padres desde el portal, si aplica.
+
+Incluir este campo en el formulario de registro y edición de calificaciones.
+
+Validación de longitud máxima de 255 caracteres.
+
+3. 🕒 Historial de Calificaciones Modificadas
+Registrar un historial de cambios por calificación, incluyendo:
+
+Fecha y hora de la modificación
+
+Valor anterior y nuevo
+
+Usuario que lo modificó (profesor)
+
+Crear una tabla de bitácora para esto en la base de datos.
+
+Mostrar este historial al hacer clic sobre un ícono (por ejemplo, un reloj) junto a la calificación editada.
+
+4. 🚫 Bloqueo de Edición si el Periodo Está Cerrado
+Verificar si el periodo académico seleccionado está marcado como “cerrado”.
+
+Si lo está, bloquear cualquier modificación o creación de nuevas calificaciones para ese periodo.
+
+Mostrar mensaje explicativo al usuario.
+
+5. 👤 Resumen de Calificaciones por Alumno
+Crear una nueva vista en la sección de calificaciones que permita:
+
+Seleccionar un alumno y visualizar todas sus calificaciones por materia y periodo.
+
+Mostrar los comentarios si existen.
+
+Opción de exportar este resumen como PDF o imprimirlo.
+
+Una vez implementadas estas mejoras, por favor:
+
+Confirmar en qué ramas se realizaron los cambios.
+
+Indicar cualquier migración necesaria en base de datos.
+
+Añadir una nota de prueba para cada funcionalidad.
+

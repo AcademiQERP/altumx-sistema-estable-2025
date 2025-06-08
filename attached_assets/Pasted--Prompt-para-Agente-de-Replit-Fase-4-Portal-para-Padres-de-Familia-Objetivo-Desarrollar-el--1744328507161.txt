@@ -1,0 +1,93 @@
+📥 Prompt para Agente de Replit – Fase 4: Portal para Padres de Familia
+🎯 Objetivo:
+Desarrollar el Portal de Padres, una sección personalizada para usuarios con rol padre, donde puedan visualizar la información académica y financiera de sus hijos registrados.
+
+🧩 Estructura general
+🔐 Acceso
+El padre debe iniciar sesión con su cuenta (rol: padre)
+
+Verá una lista de sus hijos asociados (desde la tabla relacion_padres_alumnos)
+
+Al seleccionar un hijo, podrá ver información detallada
+
+👁️‍🗨️ Vista principal (Dashboard del padre)
+Cuando el padre inicia sesión y selecciona a un hijo, verá un panel con las siguientes secciones:
+
+📘 1. Calificaciones
+Mostrar promedio general por materia
+
+Mostrar calificaciones por periodo (ej. Trimestre 1, 2, 3)
+
+Agregar botón para descargar boleta PDF
+
+Endpoint sugerido:
+
+GET /boleta/{alumno_id}
+
+📅 2. Asistencias
+Tabla de asistencias con fecha, presencia/ausencia, y justificación (si existe)
+
+Visualización tipo calendario o lista agrupada por mes
+
+Endpoint sugerido:
+
+GET /asistencias?alumno_id={}
+
+💰 3. Estado de Cuenta
+Mostrar:
+
+Concepto de pago
+
+Monto total
+
+Pagado hasta el momento
+
+Saldo pendiente
+
+Botón de “Ver detalle” por cada concepto
+
+Endpoint sugerido:
+
+GET /estado-cuenta/{alumno_id}
+
+🔔 4. Notificaciones Escolares
+Mostrar lista de circulares o mensajes recientes
+
+Puede estar conectado a un endpoint simple tipo:
+
+GET /avisos?nivel=primaria
+
+GET /avisos?alumno_id={}
+
+🔐 Seguridad y roles
+Solo los padres deben ver esta sección
+
+Validar que solo vean a sus hijos asociados en relacion_padres_alumnos
+
+🎨 Interfaz sugerida
+Panel tipo “cards” con cada hijo
+
+Tabs o menú lateral con: Calificaciones – Asistencias – Estado de Cuenta – Avisos
+
+Diseño limpio y responsivo (útil en móvil)
+
+✅ Resultado esperado
+Una interfaz funcional que permita a los padres:
+
+Consultar calificaciones, asistencias y pagos de forma clara
+
+Descargar boleta en PDF
+
+Estar al tanto de la información clave del colegio
+
+¿Quieres que prepare también la estructura de base de datos para el módulo de notificaciones (avisos escolares)?
+
+
+
+
+Dijiste:
+si también 
+ChatGPT dijo:
+Perfecto. Aquí tienes la estructura de base de datos para el módulo de Notificaciones o Avisos Escolares, completamente adaptada para funcionar dentro del ERP y compatible con múltiples niveles, grupos o alumnos individuales.
+
+🧩 Tablas para el Módulo de Notificaciones Escolares

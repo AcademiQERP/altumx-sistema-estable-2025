@@ -1,0 +1,73 @@
+✅ Instrucción para el Agente – Mejora Visual del Módulo “Estado de Cuenta” (Portal para Padres)
+🎯 Objetivo:
+Optimizar visualmente el módulo de Estado de Cuenta para facilitar la interpretación del estado financiero del alumno. Todos los ajustes son estrictamente visuales e informativos. No deben realizarse cambios en cálculos, flujos de pago o lógica backend.
+
+🧩 Cambios visuales solicitados
+1. 📌 Título del bloque superior
+Agregar título visual encima de las tarjetas de resumen.
+
+Texto sugerido:
+📊 Resumen Financiero del Estudiante
+
+Estilo: fuente seminegrita, gris oscuro, tamaño medio.
+
+Ubicación: encima de las tarjetas de Adeudo Actual, Pagado este Mes y Asistencia.
+
+🔒 Seguridad:
+✅ Solo se trata de un texto estático visual.
+❌ No modificar estructura ni lógica del resumen.
+
+2. 💵 Mejora en presentación del balance
+Reemplazar el texto “Balance actual: -$8500” por una etiqueta más comprensible.
+
+Si el balance es negativo (saldo a favor del padre):
+
+✅ Saldo a favor: $8,500 MXN
+
+Si el balance es positivo (adeudo):
+
+🔴 Saldo pendiente: $2,500 MXN
+
+Usar colores verdes o rojos sutiles según el caso.
+
+🔒 Seguridad:
+✅ Solo se modifica el texto y color, no se cambia el valor real.
+✅ Se conserva el cálculo ya realizado por el sistema.
+❌ No modificar lógica contable ni flujos de pago.
+
+3. 📆 Agregar selector visual de periodo (filtro no funcional)
+Añadir un dropdown de selección de mes encima de la tabla de pagos.
+
+Ejemplo visual:
+🗓️ Periodo: Mayo 2025 ▼
+
+Por ahora, puede ser estático o simulado (sin cambiar resultados).
+
+En futuras fases, puede usarse para filtrar visualmente los pagos mostrados.
+
+🔒 Seguridad:
+✅ Visual únicamente.
+❌ No realizar consultas ni modificar filtros en backend.
+
+4. 🧾 Nueva columna “Estado del Recibo”
+Agregar una columna al final de la tabla de pagos con una etiqueta informativa.
+
+Estado posible:
+
+📥 Descargado (si ya descargó el recibo)
+
+🕓 Pendiente (si el padre aún no solicita)
+
+✅ Solicitado (si hizo clic en solicitar)
+
+Las etiquetas pueden ser visuales o simuladas por ahora.
+
+🔒 Seguridad:
+✅ No altera la lógica de entrega de recibos.
+✅ Solo muestra texto contextual según interacción del usuario.
+❌ No vincular a ningún flujo de validación o envío real.
+
+5. 📋 Modal de confirmación al solicitar o descargar recibo
+Al hacer clic en "Solicitar" o "Descargar", mostrar un modal visual confirmando la acción.
+
+Ejemplo de texto:

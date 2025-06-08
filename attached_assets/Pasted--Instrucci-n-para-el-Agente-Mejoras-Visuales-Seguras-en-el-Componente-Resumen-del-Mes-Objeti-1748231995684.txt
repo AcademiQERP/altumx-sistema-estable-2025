@@ -1,0 +1,82 @@
+✅ Instrucción para el Agente – Mejoras Visuales Seguras en el Componente “Resumen del Mes”
+🎯 Objetivo
+Mejorar la claridad, estética y jerarquía del componente "Resumen del Mes" visible en el Dashboard Familiar, aplicando únicamente ajustes visuales no funcionales, sin modificar datos, lógica interna ni comportamiento de backend.
+
+🔹 1. Mejora visual del bloque de resumen (estética)
+🔧 Acciones solicitadas:
+
+Añadir un borde gris claro alrededor de cada bloque del resumen.
+
+Color sugerido: #E5E7EB (gris neutro suave).
+
+Estilo: borde de 1px, esquinas redondeadas (border-radius: 8px o similar).
+
+Agregar un pequeño ícono decorativo al lado izquierdo del título. Ejemplo:
+
+⭐ (estrella) o 📘 (libro abierto) antes del texto:
+
+⭐ Resumen del Mes – [Nombre del Alumno]
+
+🔒 Requisitos de seguridad:
+
+❌ No cambiar lógica de cómo se genera el resumen.
+
+✅ Solo aplicar estilos CSS y ajustes visuales no interactivos.
+
+❌ No agregar animaciones ni dependencias nuevas.
+
+🔹 2. Línea adicional de contexto temporal (periodo)
+🔧 Acciones solicitadas:
+
+Debajo de la frase actual del resumen (ej. “Boleta académica disponible para consulta”), mostrar una segunda línea con:
+
+Periodo: Mayo 2025
+
+🔧 El mes puede obtenerse desde la fecha del sistema o mostrarse como texto plano por ahora.
+
+🔒 Seguridad:
+
+❌ No consultar endpoints nuevos.
+
+✅ Solo renderizar texto estático basado en la vista actual.
+
+🔹 3. Escalabilidad de contenido (sin romper diseño)
+🔧 Acciones sugeridas a futuro:
+
+El componente debe aceptar hasta 3 líneas de contenido máximo.
+Ejemplo (cuando esté disponible más información):
+
+css
+Copiar
+Editar
+⭐ Resumen del Mes – Alexa
+• Asistencia perfecta esta semana
+• Boleta disponible para consulta
+• Tareas entregadas a tiempo
+Si solo hay un mensaje, mostrar únicamente esa línea.
+
+🔒 Seguridad:
+
+✅ Mantener estructura actual de componente.
+
+❌ No agregar lógica condicional compleja. Solo asegurar que más de una línea de texto se renderice correctamente si se agregan frases en el futuro.
+
+📌 Confirmación esperada
+Una vez implementado:
+
+Enviar captura de un ejemplo con todas las mejoras:
+
+Borde + ícono
+
+Texto del periodo
+
+Espacio visual preparado para 2 o 3 líneas
+
+Confirmar que no se ha tocado:
+
+La lógica del resumen
+
+Los datos del alumno
+
+El layout general del dashboard familiar
+

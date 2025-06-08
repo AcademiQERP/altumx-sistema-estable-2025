@@ -1,0 +1,46 @@
+🚨 Seguimiento Grupal aún falla en producción con error 500
+
+He confirmado que el problema persiste exclusivamente en producción. El endpoint:
+
+GET /api/academic-observer/seguimiento-grupo?grupoId=todos
+
+retorna de forma sistemática:
+
+→ 500 Internal Server Error  
+→ Error al obtener datos de seguimiento grupal: Servicio no disponible temporalmente
+
+🔎 Observaciones clave desde los logs:
+
+1. El error ocurre dentro de `index.js` (línea 13721:15).
+2. Toda la traza indica que la ruta Express recibe la solicitud, pero al ejecutar la lógica de búsqueda, lanza un error generalizado sin pasar por un try/catch controlado.
+3. Esto solo sucede en producción. En Replit local todo funciona correctamente.
+
+✅ Por favor, realiza los siguientes pasos para resolverlo con seguridad:
+
+1. **Revisa la función que atiende el endpoint `/seguimiento-grupo`**:
+   - Asegúrate de que `grupoId="todos"` esté explícitamente validado y tratado como un caso especial.
+   - Si se usa una comparación estricta (`===`), considera aceptar también `req.query.grupoId === 'todos'` como cadena, ya que en producción los query params siempre son strings.
+
+2. **Envuélvelo en `try/catch` explícito**:
+   - Dentro del controlador de ese endpoint, envuelve la carga de datos con:
+     ```js
+     try {
+       // lógica de carga
+     } catch (err) {
+       console.error("Error en seguimiento grupal:", err);
+       return res.status(500).json({ error: "Error al cargar alumnos para seguimiento grupal" });
+     }
+     ```
+
+3. **Agrega logs temporales en producción** para verificar que:
+   - El valor de `grupoId` es exactamente `"todos"` (string).
+   - La función que busca los alumnos no esté devolviendo `undefined` o rompiendo al acceder a propiedades de un objeto inexistente.
+   - Las variables simuladas como `alumnos`, `grupos`, o `diagnosticos` sí están disponibles en producción.
+
+4. **Asegúrate de que la fuente de datos simulados o reales esté correctamente cargada** en el entorno de producción (a veces no se importan correctamente o están mal referenciadas).
+
+💡 Prueba adicional:
+Haz una llamada directa al endpoint `/api/academic-observer/seguimiento-grupo?grupoId=todos` desde Postman o `fetch` en la consola del navegador para confirmar qué devuelve exactamente el backend (y si se cae antes de llegar al `.json()`).
+
+✅ Una vez aplicadas las validaciones, reinicia y realiza un nuevo deploy. Verifica si el problema desaparece tras esas correcciones.
+

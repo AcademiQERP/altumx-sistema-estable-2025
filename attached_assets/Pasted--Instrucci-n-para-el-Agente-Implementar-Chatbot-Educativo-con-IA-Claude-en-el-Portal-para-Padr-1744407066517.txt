@@ -1,0 +1,55 @@
+🧠 Instrucción para el Agente – Implementar Chatbot Educativo con IA (Claude) en el Portal para Padres
+Por favor, implementa un asistente inteligente tipo chatbot dentro del Portal para Padres, utilizando la API de Anthropic Claude. Esta herramienta debe ayudar a los padres de familia a consultar información clave del desempeño académico de sus hijos, responder dudas frecuentes y brindar recomendaciones personalizadas.
+
+🎯 Objetivo del chatbot:
+Facilitar el acceso a información relevante y comprensible para padres de familia, utilizando lenguaje claro y amigable.
+
+✅ Funcionalidades requeridas:
+1. Interfaz flotante accesible
+Agrega un botón flotante (💬) fijo en la esquina inferior derecha del portal /portal-padres.
+
+Al hacer clic, se debe abrir un modal estilo chat, con historial de conversación y campo de entrada.
+
+2. Procesamiento de preguntas y contexto
+Cada pregunta del padre debe ser enviada a Claude junto con el contexto académico del hijo actualmente seleccionado (datos de la API):
+
+Nombre del estudiante
+
+Calificaciones actuales
+
+Porcentaje de asistencia
+
+Tareas registradas (si existen)
+
+Estado de cuenta
+
+3. Preguntas que el chatbot debe poder contestar:
+¿Cuál es el promedio general de mi hijo?
+
+¿En qué materias necesita más apoyo?
+
+¿Cuánto debe en su estado de cuenta?
+
+¿Cuántas veces ha faltado?
+
+¿Qué tareas tiene pendientes?
+
+¿Cómo puedo apoyarlo desde casa?
+
+4. Respuestas con tono empático y educativo
+Claude debe generar respuestas breves y claras, pensadas para padres no técnicos.
+
+Ejemplo:
+
+Su hija Ana tiene un promedio general de 8.4. Ha faltado a 4 de 39 clases. Puede apoyarla en casa revisando juntos sus tareas de Matemáticas y reforzando lectura en Español.
+
+🛠️ Técnicamente:
+Utiliza una ruta POST /api/parent-chatbot que reciba la pregunta y contexto del estudiante, y regrese la respuesta de Claude.
+
+Crea un servicio en server/services/anthropic-service.ts similar a generateAcademicComment.
+
+Usa useMutation y useState para manejar la conversación en el frontend.
+
+Usa ScrollArea y diseño limpio para el historial del chat.
+
+Añade opción de limpiar conversación.

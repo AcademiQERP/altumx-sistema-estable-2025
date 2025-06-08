@@ -1,0 +1,66 @@
+✳️ Instrucción Integral para Rediseñar la Boleta Académica en PDF
+⚙️ Necesitamos actualizar completamente el servicio PDF de boleta académica para que refleje el nuevo diseño moderno que ya está funcionando dentro del portal web en la vista /boletas/:id.
+
+🎨 Diseño general solicitado para el PDF:
+✅ Encabezado profesional con:
+
+Gradiente azul moderno (como el portal).
+
+Nombre completo del estudiante, CURP, nivel, grupo, estatus.
+
+Un espacio para logo institucional, pero de momento usar un logo genérico (Educación) ya que será reutilizable en diferentes instituciones.
+
+[⚠️ Que el logo sea fácilmente reemplazable por configuración].
+
+✅ Tarjetas tipo dashboard en la parte superior:
+
+Promedio general grande, destacado, acompañado de barra horizontal de progreso.
+
+Asistencia en porcentaje, con gráfico circular.
+
+✅ Sección de calificaciones por materia:
+
+Mostrar nombre de la materia con diseño tipo card o contenedor con fondo suave.
+
+Trimestres como secciones consecutivas (no tabs, ya que PDF no es interactivo).
+
+Por cada trimestre:
+
+Desglose por criterios (ej. examen, participación, tareas, etc.) en tabla clara.
+
+Promedio del periodo.
+
+Gráfico comparativo por periodo (barras horizontales con etiquetas de calificación).
+
+✅ Pie de página profesional:
+
+Espacio para firma del docente.
+
+Fecha de emisión de la boleta.
+
+Frase institucional tipo: “Este documento fue generado digitalmente por el sistema académico.”
+
+⚠️ Incluir código QR que lleve al portal web o verificación de autenticidad (por ahora usar https://altum.edu.mx/verifica/boleta/:id como placeholder).
+
+🧩 Consideraciones técnicas para el PDF:
+Usar la misma estructura visual que se ve en /boletas/:id, adaptada a PDF.
+
+Si están usando puppeteer o html-pdf, el diseño debe ser responsivo y conservar colores y tipografía.
+
+Incluir fuente moderna y legible, como Inter, Poppins o Roboto.
+
+Incluir opción a generar:
+
+PDF resumido (solo promedio, asistencia, promedios generales por materia).
+
+PDF detallado (todo el desglose por criterio y comparativas).
+
+🧪 ¿Qué se espera?
+El PDF debe verse tan moderno y profesional como la vista web.
+
+Debe generar confianza institucional y sobresalir frente a plataformas tradicionales.
+
+Debe estar preparado para ser usado por múltiples instituciones educativas, por eso:
+
+Logo y pie de página deben ser configurables.
+

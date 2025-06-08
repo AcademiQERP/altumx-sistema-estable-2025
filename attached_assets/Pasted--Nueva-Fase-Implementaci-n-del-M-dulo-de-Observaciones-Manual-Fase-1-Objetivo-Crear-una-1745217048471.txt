@@ -1,0 +1,83 @@
+🛠️ Nueva Fase: Implementación del Módulo de Observaciones Manual (Fase 1)
+
+🎯 Objetivo: Crear una página donde los profesores puedan registrar observaciones individuales sobre sus alumnos, clasificarlas por tipo y consultarlas más adelante. Esta versión es sin integración de IA, totalmente manual.
+
+✅ Requisitos Técnicos
+
+Ruta y acceso
+Crear una nueva página accesible desde /observaciones
+Mostrar esta opción solo en el sidebar del profesor.
+
+Asegurar que solo usuarios con rol profesor puedan acceder.
+
+Formulario de registro de observación
+Campos requeridos:
+Fecha de observación: tipo date (por defecto la fecha actual)
+
+Alumno: dropdown con alumnos asignados al profesor
+
+Materia: dropdown con materias asignadas al profesor
+
+Tipo de observación: opciones fijas:
+
+Académica
+
+Conductual
+
+Seguimiento
+
+Reconocimiento
+
+Comentario: campo textarea obligatorio
+
+Botón: Guardar observación
+
+Base de datos
+Crear tabla observaciones con la siguiente estructura:
+{
+id: number;
+fecha: Date;
+profesor_id: string;
+alumno_id: string;
+materia_id: number;
+tipo: 'Académica' | 'Conductual' | 'Seguimiento' | 'Reconocimiento';
+comentario: string;
+created_at: Date;
+}
+
+Vista de observaciones recientes
+Debajo del formulario, mostrar una tabla con las últimas 10 observaciones hechas por ese profesor.
+Columnas:
+Fecha
+
+Alumno
+
+Materia
+
+Tipo
+
+Comentario
+
+Validación y experiencia de usuario
+Validar todos los campos requeridos
+Mostrar toast de confirmación al guardar correctamente
+
+Mostrar alerta si ocurre un error
+
+Agregar botón Ver todas las observaciones (aún sin funcionalidad, solo placeholder visual)
+
+🔒 Seguridad
+Asegurar que solo el profesor autenticado pueda ver y registrar observaciones.
+
+Los dropdowns de alumnos y materias deben estar filtrados por su relación con el profesor autenticado.
+
+📈 Consideraciones futuras
+Este módulo será base para:
+
+Activar IA educativa más adelante
+
+Enviar observaciones a tutores o directivos
+
+Generar reportes de seguimiento
+
+Por favor, implementa esta fase de forma segura y modular, como lo hemos hecho en etapas anteriores. Me confirmas cuando esté listo o si necesitas dividir esta tarea en subtareas.

@@ -1,0 +1,61 @@
+✅ Instrucción para el Agente – Agregar Resumen de Logros Mensuales por Alumno (solo visual)
+🎯 Objetivo
+Mostrar una pequeña tarjeta informativa en el Dashboard Familiar debajo de cada alumno, destacando sus logros académicos o de comportamiento más recientes en modo resumen motivacional, sin editar datos ni acceder a lógica compleja.
+
+🧩 Comportamiento esperado
+Por cada alumno listado, mostrar una tarjeta con título:
+
+🏆 Resumen del Mes – [Nombre del Alumno]
+
+📄 Contenido sugerido (ejemplo dinámico pero simple):
+
+Asistencia perfecta esta semana
+
+Tarea entregada a tiempo
+
+Boleta generada y consultada
+
+Sin adeudos activos
+
+Buen desempeño general
+
+✅ El contenido debe generarse solo si los datos ya están disponibles en frontend.
+Por ejemplo:
+
+Si asistencia = 100%, mostrar “Asistencia perfecta esta semana”
+
+Si entregó su tarea = 1/1, mostrar “Tarea entregada a tiempo”
+
+Si estado de cuenta = $0, mostrar “Sin adeudos activos”
+
+📌 Si no hay logros disponibles, mostrar:
+
+“Este mes no hay logros destacados registrados aún. ¡Ánimo para el siguiente!”
+
+🎨 Diseño visual sugerido
+Color de fondo: azul claro (#F1F6FE) o verde suave (#E8F7EF)
+
+Ícono decorativo: ⭐, 🏅 o 🧠 (elegir según tono institucional)
+
+Texto con bullets o lista corta
+
+Tamaño compacto, tipo tarjeta (igual al resto del dashboard)
+
+🔒 No debe incluir botones ni interacción. Solo lectura y refuerzo visual.
+
+🛡️ Reglas de seguridad
+Requisito	Justificación
+❌ No consultar nuevos endpoints	Solo usar datos ya cargados en la vista del padre
+✅ No modificar datos existentes	Todo es visual, no editable ni clickeable
+✅ Compatible con móviles	Las tarjetas deben apilarse bien debajo de cada alumno
+❌ No mostrar calificaciones detalladas	Solo se permite mostrar boleta generada o consulta general
+
+✅ Confirmación esperada
+Una vez implementado:
+
+Enviar captura de ejemplo con al menos 1 alumno con logros destacados.
+
+Mostrar ejemplo sin logros (estado vacío).
+
+Confirmar que la funcionalidad es solo visual y no afecta lógica o seguridad del portal familiar.
+

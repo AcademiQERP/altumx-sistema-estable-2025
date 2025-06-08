@@ -1,0 +1,76 @@
+✅ Instrucción para implementar el módulo "Reporte IA"
+Por favor, implementa el componente y la ruta /portal-padres/reporte-ia para mostrar un Informe Inteligente de Desempeño Académico personalizado para el estudiante seleccionado. Este módulo debe generar y presentar un resumen visual e interpretativo de su progreso académico, asistencia y estado financiero, con las siguientes secciones:
+
+🧠 Contenido del Reporte IA
+Encabezado Dinámico
+
+Título: Informe Inteligente de [Nombre del Estudiante]
+
+Subtítulo: “Resumen académico y financiero generado con IA”
+
+Resumen Académico
+
+Materias con mejor rendimiento (íconos verdes)
+
+Áreas con oportunidad de mejora (íconos de advertencia)
+
+Promedios por materia, si están disponibles
+
+Gráfico de evolución si hay datos históricos
+
+Resumen de Asistencia
+
+Porcentaje mensual y comparativo con el mes anterior
+
+Indicadores visuales (flechas, colores)
+
+Resumen Financiero
+
+Total pagado en el ciclo
+
+Adeudos pendientes actuales
+
+Últimos pagos registrados
+
+Recomendaciones Generadas por IA
+
+Sugerencias personalizadas basadas en desempeño, como:
+
+“Reforzar lectura en casa”
+
+“Reconocer esfuerzo constante”
+
+“Consultar con el docente sobre avances en matemáticas”
+
+Notas Finales del Tutor Virtual
+
+Mensaje positivo generado automáticamente con tono empático
+
+🖥️ Elementos Visuales y Funcionalidad
+Uso de tarjetas, colores suaves y emojis para facilitar lectura
+
+Botón para “Descargar PDF”
+
+Botón para “Ver historial completo” (opcional para navegación a otro módulo)
+
+Integración con los datos actuales del sistema:
+
+Calificaciones
+
+Asistencias
+
+Pagos
+
+En caso de no haber información suficiente aún, mostrar un mensaje como:
+
+“Estamos recopilando los datos para generar este informe. Pronto estará disponible.”
+
+🧪 Verificación esperada
+Una vez implementado:
+
+El botón "Disponible" en el dashboard debe dirigir correctamente a la ruta /portal-padres/reporte-ia.
+
+El contenido debe adaptarse al estudiante seleccionado.
+
+Se debe renderizar un resumen funcional, incluso si aún no hay muchos datos.
+

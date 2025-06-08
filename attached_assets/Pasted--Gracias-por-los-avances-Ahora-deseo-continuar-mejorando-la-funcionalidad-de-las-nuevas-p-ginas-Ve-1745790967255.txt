@@ -1,0 +1,37 @@
+¡Gracias por los avances! Ahora deseo continuar mejorando la funcionalidad de las nuevas páginas "Ver Recomendaciones" y "Ver Plan de Recuperación".
+
+Actualmente, al seleccionar un grupo se muestran correctamente las estadísticas generales del grupo (alumnos, promedio, asistencia y aprobados) y los botones de "Generar Plan" o "Generar Recomendaciones" funcionan en cuanto al mensaje de confirmación.
+
+Sin embargo, lo que necesitamos ahora es lo siguiente:
+
+Mostrar el contenido generado por la IA directamente en la página después de hacer clic en "Generar Plan" o "Generar Recomendaciones", sin necesidad de descargar un PDF para visualizarlo.
+
+Estructura esperada del contenido en la página "Ver Recomendaciones":
+
+Mostrar las recomendaciones académicas organizadas en tarjetas o bloques claros.
+
+Clasificar las recomendaciones por tipo de estudiante si aplica (crítico, en riesgo, buen desempeño).
+
+Utilizar viñetas o formato de lista para las recomendaciones individuales.
+
+Mostrar una sección de observaciones finales si el sistema genera algún comentario global sobre el grupo.
+
+Estructura esperada del contenido en la página "Ver Plan de Recuperación":
+
+Mostrar las estrategias de intervención personalizadas generadas por IA.
+
+Dividir visualmente las estrategias por nivel de atención (crítico, en riesgo, etc.) si existe esa distinción.
+
+Mantener consistencia visual y márgenes adecuados.
+
+Notas importantes:
+
+No eliminar ni afectar la funcionalidad actual de generación de PDF. La visualización en pantalla debe ser adicional al botón de descarga.
+
+La visualización debe ser limpia, profesional y adaptada al diseño de tarjetas que ya maneja el portal.
+
+Si no hay datos generados aún, mostrar un mensaje amigable como "No se han generado recomendaciones para este grupo todavía" o "No se ha generado un plan de recuperación todavía".
+
+¿Podrías implementar este comportamiento para que los docentes puedan visualizar directamente el contenido generado por la IA en el portal, además de descargarlo como PDF si así lo desean?
+
+¡Gracias!

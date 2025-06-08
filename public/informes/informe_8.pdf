@@ -1,0 +1,83 @@
+%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+/Resources <<
+/Font <<
+/F1 5 0 R
+>>
+>>
+>>
+endobj
+
+4 0 obj
+<<
+/Length 200
+>>
+stream
+BT
+/F1 12 Tf
+50 750 Td
+(INFORME ACADEMICO INTELIGENTE) Tj
+0 -20 Td
+(Sistema AcademiQ - Reporte Personalizado) Tj
+0 -40 Td
+(Estudiante: Alexa Fernanda Cebreros Contreras) Tj
+0 -20 Td
+(Nivel: Preparatoria - Estado: Activo) Tj
+0 -20 Td
+(Periodo: Junio 2025) Tj
+0 -20 Td
+(Recibo Asociado: #12 - $5,000.00) Tj
+0 -40 Td
+(PROMEDIO GENERAL: 8.92) Tj
+0 -40 Td
+(Documento generado automáticamente) Tj
+0 -20 Td
+(Vinculado al recibo de pago validado) Tj
+ET
+endstream
+endobj
+
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+
+xref
+0 6
+0000000000 65535 f 
+0000000010 00000 n 
+0000000079 00000 n 
+0000000136 00000 n 
+0000000301 00000 n 
+0000000552 00000 n 
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+619
+%%EOF

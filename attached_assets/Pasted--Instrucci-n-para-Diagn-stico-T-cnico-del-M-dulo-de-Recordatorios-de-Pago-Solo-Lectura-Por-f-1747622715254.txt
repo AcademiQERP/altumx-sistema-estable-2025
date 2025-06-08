@@ -1,0 +1,43 @@
+🛠️ Instrucción para Diagnóstico Técnico del Módulo de Recordatorios de Pago (🔒 Solo Lectura)
+Por favor, realiza un diagnóstico técnico completo del módulo de Recordatorios de Pago (/admin/recordatorios) incluyendo sus tres secciones: Tareas Programadas, Historial de Recordatorios y Logs de Auditoría, sin modificar absolutamente ningún dato ni realizar escrituras.
+
+Objetivo:
+Validar que todos los flujos, componentes y funciones del módulo estén funcionando correctamente desde el punto de vista técnico, sin alterar datos.
+
+✅ Puntos Específicos a Verificar
+1. Sección de Tareas Programadas
+Verifica que el estado actual de la programación automática se reciba correctamente desde la API.
+
+Revisa si el botón “Ejecutar recordatorios ahora” activa el estado de ejecución sin errores (solo en consola si aplica).
+
+Confirma si la hora del sistema se sincroniza y actualiza correctamente al recargar.
+
+2. Sección de Envío Manual de Recordatorios
+Verifica si el botón “Enviar recordatorios ahora” aparece habilitado únicamente cuando hay condiciones para ejecutar.
+
+Asegura que el mensaje informativo debajo del botón se muestra correctamente y que las advertencias estén visibles.
+
+3. Historial de Recordatorios
+Valida que el historial se carga correctamente desde la API, aunque esté vacío (estado inicial).
+
+Verifica que el botón “Actualizar” efectúe la recarga del historial sin errores.
+
+4. Logs de Auditoría
+Revisa que se visualicen correctamente los registros de acciones (éxito/error).
+
+Valida que los enlaces “Ver” estén funcionando y conectados a los datos reales (sin ejecutar).
+
+Confirma que el campo de estado (verde/rojo) se presenta de forma coherente con el estado de ejecución.
+
+📊 Indicadores a Confirmar
+No debe haber errores de red ni de consola al cambiar entre pestañas.
+
+Todos los endpoints (API: /recordatorios, /auditoria, /historial) deben retornar respuestas válidas.
+
+La interfaz debe estar alineada, sin desbordes visuales ni botones superpuestos.
+
+Las etiquetas como “En espera”, “No programado” o “Error” deben coincidir con los datos reales recibidos.
+
+✅ Importante: Este diagnóstico es únicamente para auditoría técnica no invasiva, por lo tanto no modifiques ningún archivo, lógica ni valores del sistema. No ejecutes acciones como “Reiniciar tareas” o “Enviar recordatorios”.
+
+Cuando termines, por favor proporciona un reporte técnico de validación funcional señalando si todo opera correctamente o si detectas alguna alerta que deba ser corregida más adelante.

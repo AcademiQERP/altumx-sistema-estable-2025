@@ -1,0 +1,82 @@
+✅ Instrucción para el Agente: Implementar Dashboard Principal del Módulo Académico
+🎯 Objetivo:
+Implementar un dashboard visual principal dentro del módulo Académico, en la ruta /academico/dashboard, que consolide la información clave de los submódulos:
+Asistencias, Calificaciones, Tareas y Boletas, en un solo lugar visual de consulta.
+
+Esta vista servirá para monitoreo, análisis y navegación rápida.
+No reemplaza la funcionalidad de los submódulos existentes.
+
+🧭 Ubicación:
+Crear un nuevo ítem en el menú lateral bajo la categoría "Académico" llamado Dashboard Académico
+
+Ruta sugerida: /academico/dashboard
+
+🖼️ Diseño del Dashboard Académico
+🔢 Indicadores principales (tarjetas superiores):
+📅 Asistencia promedio semanal (% de presencia)
+
+🎯 Promedio general del grupo (por trimestre activo)
+
+📚 Cantidad de tareas activas y vencidas
+
+🧾 % de boletas emitidas del periodo activo
+
+📌 Total de alumnos con riesgo académico (si aplica lógica futura)
+
+📊 Secciones visuales y tabulares:
+Gráfico de Asistencia semanal
+
+Barras o líneas con % de asistencia por día
+
+Filtros por grupo o nivel educativo (si es posible)
+
+Rendimiento Académico
+
+Tabla con materias o grupos con menor rendimiento promedio
+
+Ranking por desempeño
+
+Resumen de Tareas
+
+Listado compacto: Tareas activas, vencidas y próximas a vencer
+
+Opcional: botón rápido "Ver entregas"
+
+Resumen de Boletas
+
+Total generadas del periodo actual vs total de alumnos
+
+Alerta si hay boletas pendientes de emitir
+
+📎 Extras visuales:
+Botón para exportar resumen académico en PDF o Excel
+
+Opción de filtrar por grupo o nivel (solo visual)
+
+Diseño adaptable y responsivo (tarjetas o bloques con scroll interno si es necesario)
+
+Mostrar placeholder informativo si no hay datos, por ejemplo:
+“No se han registrado asistencias esta semana”
+
+🔐 Seguridad y restricciones importantes:
+❗No modificar la lógica funcional de ningún submódulo académico.
+
+El dashboard es solo de consulta (📄), no incluir funciones de edición, eliminación o creación.
+
+Toda la información debe venir de endpoints ya existentes del sistema.
+
+No modificar las rutas actuales como /asistencias, /tareas, /boletas, etc.
+
+Validar que solo usuarios con permisos académicos puedan acceder al dashboard.
+
+Respetar los estilos visuales existentes en el sistema (colores, tipografía, tarjetas, iconografía).
+
+🧠 UX Sugerida:
+Tarjetas con íconos, colores suaves y textos informativos.
+
+Jerarquía visual clara: indicadores arriba, datos tabulares abajo.
+
+Tooltip con contexto adicional si los datos son cortos o poco explicativos.
+
+En dispositivos móviles, asegurar que las tarjetas se reorganicen en bloques apilables.
+

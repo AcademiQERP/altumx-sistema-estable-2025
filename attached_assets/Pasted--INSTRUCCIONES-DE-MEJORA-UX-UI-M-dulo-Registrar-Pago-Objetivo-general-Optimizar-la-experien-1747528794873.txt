@@ -1,0 +1,84 @@
+✅ INSTRUCCIONES DE MEJORA UX/UI – Módulo “Registrar Pago”
+🧠 Objetivo general:
+Optimizar la experiencia de usuario en el formulario de "Registrar Pago", con mejoras visuales no invasivas, manteniendo el sistema 100% funcional y estable.
+
+1. Activar por defecto el tab “Pago por Concepto”
+Qué hacer: Asegurarse de que la pestaña “Pago por Concepto” esté activa al cargar la vista.
+
+Motivo: Es el flujo más utilizado, evita un clic innecesario.
+
+Seguridad: Solo afecta el estado visual inicial (defaultTab = 'concept').
+
+2. Mostrar asterisco en campos obligatorios
+Qué hacer: Agregar un asterisco * junto al label de campos requeridos:
+
+Estudiante
+
+Concepto de pago
+
+Monto
+
+Fecha
+
+Método de pago
+
+Opcional: Agregar texto auxiliar “* Campo obligatorio” al pie del formulario.
+
+Motivo: Mejora accesibilidad y claridad para el usuario.
+
+Seguridad: Solo afecta etiquetas de texto y estilos.
+
+3. Reorganizar sección “Método de Pago” para mejor legibilidad
+Qué hacer: Usar un grid o flex-wrap en 2 columnas para los métodos disponibles:
+
+Primera columna: Efectivo, Cheque, Tarjeta
+
+Segunda columna: Transferencia, Otro
+
+Motivo: Actualmente están alineados horizontalmente, lo que puede perderse visualmente.
+
+Seguridad: Sólo implica reestilización de radio buttons.
+
+4. Agregar texto auxiliar al campo “Referencia”
+Qué hacer: Mostrar una guía de formato opcional como texto gris:
+
+Placeholder: Ej. RT082733
+
+Texto debajo del input: “Número de operación o ID de transacción, si aplica.”
+
+Motivo: Mejora comprensión inmediata sin confusión.
+
+5. Mostrar ficha resumen del Concepto seleccionado
+Qué hacer: Al seleccionar un concepto en el select, mostrar un pequeño resumen debajo:
+
+Monto estándar
+
+Nivel aplicable
+
+Ciclo escolar
+
+Estado: Activo/Inactivo
+
+Visual sugerido: Caja gris clara con íconos opcionales.
+
+Motivo: Ayuda al usuario a confirmar visualmente que seleccionó correctamente.
+
+Seguridad: No modifica el select, solo muestra un componente card adicional bajo el campo.
+
+6. Control visual de disponibilidad del botón “Guardar Pago”
+Qué hacer: Deshabilitar el botón hasta que los campos requeridos estén llenos.
+
+Agregar mensaje contextual cuando esté deshabilitado:
+
+Tooltip: “Completa los campos obligatorios para continuar.”
+
+Motivo: Evita frustración al hacer clic y recibir errores.
+
+Seguridad: No interfiere con lógica de validación existente, solo controla visibilidad y feedback.
+
+🛡️ Consideraciones Finales
+Todas las mejoras deben implementarse de forma no destructiva, sin alterar las rutas, APIs o lógica del sistema.
+
+No deben modificarse componentes de backend, solo elementos visuales (frontend-only).
+
+Las mejoras deben probarse con un usuario sin privilegios administrativos para garantizar su comprensión clara.

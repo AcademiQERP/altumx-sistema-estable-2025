@@ -1,0 +1,34 @@
+Hola, he realizado las pruebas correspondientes y te comparto mis observaciones:
+
+Módulo "Ver Recomendaciones Académicas"
+
+El contenido generado por IA se genera correctamente, pero no se visualiza en tarjetas en pantalla.
+
+En consola aparece un error de 404 Not Found para la ruta /api/teacher-assistant/recommendations.
+
+Es importante corregir tanto la generación del contenido como la visualización previa en tarjetas dinámicas dentro del módulo (antes de ofrecer opción de descargar el PDF).
+
+Módulo "Plan de Recuperación Académica"
+
+El contenido tampoco se visualiza.
+
+Se presenta un error 500 Internal Server Error indicando "Cannot read properties of undefined (reading 'filter')" en consola.
+
+Este error sugiere que hay un problema al intentar acceder a propiedades de estudiantes, probablemente porque el objeto no está siendo validado correctamente antes de intentar operar sobre él.
+
+🚀 Instrucciones específicas para continuar:
+Primero, corregir el problema de la ruta api/teacher-assistant/recommendations para que el contenido generado en "Ver Recomendaciones" se pueda obtener correctamente y renderizar en pantalla dentro de tarjetas dinámicas.
+
+Segundo, asegurarse que la estructura esperada del objeto devuelto por IA esté correctamente parseada y pintada en las tarjetas.
+
+Tercero, corregir el error en el "Plan de Recuperación" verificando correctamente si el array students existe antes de aplicar .filter o cualquier operación sobre él. Se debe incluir validación robusta para evitar que el servidor crashee si faltan propiedades.
+
+Cuarto, validar y probar que ambos módulos muestren el contenido generado en pantalla antes de ofrecer el botón de "Guardar como PDF", respetando el diseño de tarjetas expandibles previamente planteado.
+
+📋 Notas adicionales:
+Evitar regresiones: Por favor, asegura que no se afecte el flujo previo del Asistente Educativo que funciona desde el Dashboard principal.
+
+Claridad en errores: Si un contenido no se puede generar (por falta de datos, por ejemplo), mostrar un mensaje visual adecuado en la pantalla, no solo en consola.
+
+Feedback visual: Confirmar que después de corregir estos errores, se vea una previsualización de las recomendaciones y del plan de recuperación en forma de tarjetas, antes de permitir la descarga en PDF.
+

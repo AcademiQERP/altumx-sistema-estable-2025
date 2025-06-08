@@ -1,0 +1,54 @@
+Hola, por favor implementa el nuevo diseño de boleta académica con las siguientes características modernas e innovadoras. El objetivo es brindar una experiencia visual mucho más atractiva, clara y profesional, destacando de las boletas tradicionales.
+
+🎯 Objetivo del Rediseño
+Crear una boleta académica con experiencia tipo dashboard ejecutivo visual, destacando el rendimiento del alumno, con una presentación clara, moderna y adaptable a cualquier institución educativa.
+
+✅ Cambios a Realizar
+Encabezado Moderno
+
+Elimina el encabezado genérico tipo “Boleta Académica”.
+
+En su lugar, coloca una barra superior con fondo degradado (azul oscuro a celeste) con:
+
+Nombre del estudiante en tipografía grande (ej. font-bold text-2xl)
+
+CURP y nivel escolar en subtítulo (text-sm text-neutral-500)
+
+Opción para mostrar un logo genérico provisional (ícono escolar o letra "E").
+
+Resumen Académico en Tarjetas
+
+Coloca dos tarjetas resumen una al lado de otra:
+
+Promedio General: con número grande, visualmente destacado (text-5xl font-bold text-green-600)
+
+Asistencia: con porcentaje y barra circular de progreso.
+
+Sección de Calificaciones por Materia
+
+Mostrar cada materia en un card contenedor elegante (rounded-xl shadow-sm bg-white p-4) con:
+
+Nombre de la materia y periodo en la parte superior.
+
+Tabla de calificaciones por criterio (Ej. Examen, Participación, Proyecto…)
+
+Promedio final al pie, visualmente resaltado.
+
+Estilo visual
+
+Usa Tailwind CSS para mantener consistencia visual.
+
+Aplicar rounded-xl, shadow, bg-neutral-50, text-gray-700, border-b border-gray-200 para secciones internas.
+
+Diseño mobile-first con buena respuesta en pantallas pequeñas.
+
+Botones
+
+Mantén los botones de "Descargar PDF" y "Generar comentario con IA", pero colócalos alineados a la derecha, con diseño moderno (btn-primary con ícono).
+
+🧪 Detalles Técnicos
+Puedes usar el archivo de boleta actual como base, pero refactoriza los estilos y layout.
+
+El PDF generado debe mantener este diseño moderno y responsivo.
+
+Mantén el encabezado sin logo institucional específico, usa un ícono genérico escolar mientras se implementa multiinstitución.

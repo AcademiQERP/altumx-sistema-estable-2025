@@ -1,0 +1,93 @@
+🧠 Instrucción para el Agente: Mejora del Módulo de Calificaciones del Profesor
+Por favor, procede con las siguientes tareas para ampliar la funcionalidad del Módulo de Calificaciones del Profesor:
+
+✅ 1. Agregar Comentarios Opcionales por Calificación
+Objetivo: Permitir a los docentes agregar observaciones personalizadas a cada calificación registrada.
+
+Acciones:
+
+Base de Datos:
+
+Verifica si la tabla grades tiene el campo comentario (tipo text o varchar).
+
+Si no existe, realiza una migración para agregarlo como un campo opcional (nullable).
+
+Backend:
+
+Actualiza las rutas relacionadas (getGradesByStudent, getGradesByGroupAndSubject, getGrade, updateGradeBatch, createGrade) para aceptar y devolver el campo comentario.
+
+Ajusta los esquemas de validación (zod) para incluir el campo comentario como opcional (string | null).
+
+Frontend:
+
+En la tabla editable de calificaciones, añade una nueva columna llamada Comentario con celdas editables.
+
+Permitir al docente escribir comentarios cortos (máximo 300 caracteres).
+
+Asegúrate de que se guarde correctamente al presionar Enter o al cambiar de celda.
+
+📜 2. Mostrar Historial de Cambios
+Objetivo: Permitir a los docentes consultar quién modificó una calificación y cuándo.
+
+Acciones:
+
+Backend:
+
+Verifica que la tabla gradeHistory registre:
+
+ID del docente
+
+Fecha del cambio
+
+Calificación anterior
+
+Calificación nueva
+
+Grupo, materia y alumno asociados
+
+Expón una nueva API:
+
+GET /api/grades/history/:teacherId
+
+(Opcional: incluir filtros por grupo o materia)
+
+Frontend:
+
+Agrega una sección o botón en la vista de calificaciones que diga: “Ver Historial”.
+
+Al hacer clic, mostrar un modal o tabla con:
+
+Alumno
+
+Materia
+
+Cambio realizado
+
+Fecha
+
+Docente (si aplica)
+
+Ordenar de forma descendente por fecha.
+
+✨ 3. Validaciones UX/UI
+Objetivo: Prevenir errores de captura o envíos incompletos.
+
+Validar que:
+
+La calificación esté entre 0 y 10
+
+El comentario no exceda 300 caracteres
+
+Mostrar alertas si el usuario intenta guardar sin completar todos los campos requeridos.
+
+Mantener los colores y estilo del sistema actual para los nuevos componentes.
+
+Cuando termines, por favor confirma lo siguiente:
+
+Que el campo comentario se guarda correctamente.
+
+Que el historial es visible y está vinculado al ID del usuario.
+
+Que no hay errores visibles en consola ni fallos de validación en los nuevos formularios.
+
+Gracias por tu trabajo. Seguimos mejorando este sistema para ofrecer una experiencia sólida para docentes y administrativos.

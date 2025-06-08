@@ -1,0 +1,61 @@
+Hola, excelente avance hasta ahora. Gracias.
+
+Para continuar y completar la implementación de las nuevas páginas, por favor realiza lo siguiente:
+
+✅ 1. Mostrar datos generados en las nuevas páginas del portal del profesor.
+
+Actualmente, tanto la página "Ver Recomendaciones" como la página "Ver Plan de Recuperación" permiten generar el PDF, pero el contenido no se visualiza en pantalla.
+Necesitamos que en ambas páginas también se muestre de forma clara:
+
+Resumen general del grupo (promedio, asistencia, número de estudiantes).
+
+Contenido generado por el asistente IA (diagnóstico, estrategias, recomendaciones, plan de acción, etc.).
+
+Secciones estructuradas de forma visual, no solo para descarga PDF sino también visibles directamente en el portal.
+
+Importante:
+Cada página debe mostrar exclusivamente su propio contenido (recomendaciones o plan de recuperación) de manera ordenada, como si fuera una vista previa del PDF, respetando el formato visual del mockup que te proporcionamos.
+No debe haber datos mezclados ni errores de estructura.
+
+✅ 2. Mantener consistencia en el diseño.
+
+El contenido mostrado debe seguir el mismo diseño limpio, elegante y profesional que ya definimos para los PDFs:
+
+Tarjetas con esquinas redondeadas.
+
+Íconos y badges de estado (Crítico, En riesgo, Buen desempeño).
+
+Viñetas uniformes y alineadas.
+
+Sección de diagnóstico del grupo siempre visible en la parte superior.
+
+Sección de estrategias o recomendaciones estructuradas como tarjetas.
+
+Pie de página institucional.
+
+✅ 3. Flujo de trabajo correcto.
+
+Al seleccionar un grupo ➔ debe mostrar inmediatamente la información generada.
+
+Posteriormente, el botón de "Generar PDF" debe exportar exactamente lo que se visualiza en pantalla.
+
+Asegurarse de que la navegación entre secciones sea fluida, sin recargar toda la página.
+
+🚫 Evitar:
+
+No crear una doble generación (una para pantalla y otra distinta para PDF).
+
+No recargar el navegador completo cada vez que se selecciona un grupo.
+
+No dejar campos vacíos o secciones en blanco si ya existe información generada.
+
+🔵 Notas técnicas finales:
+
+Asegúrate de extraer correctamente el contenido ya generado por el asistente IA y renderizarlo en las nuevas páginas.
+
+Si no existe contenido generado todavía, mostrar un mensaje amigable como: "Aún no se han generado recomendaciones/planes para este grupo. Seleccione 'Generar' para comenzar."
+
+Respetar los estilos, colores institucionales y estructura del portal actual.
+
+¡Gracias!
+Quedo atento a la actualización para validar el funcionamiento correcto.
