@@ -154,6 +154,7 @@ app.get("/", (_req, res) => {
   res.send("✅ AcademiQ ERP está corriendo correctamente.");
 });
 // feat: Ruta raíz `/` agregada para evitar error 404 en Railway
+// Comentario mínimo para redeploy en Railway 🚀
 
   
   // Middleware para manejar rutas API inexistentes y responder con JSON en lugar de HTML
