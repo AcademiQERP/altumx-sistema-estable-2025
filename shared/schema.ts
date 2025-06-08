@@ -687,8 +687,8 @@ export type InstitutionSetting = typeof institutionSettings.$inferSelect;
 // Registro de envío de correos electrónicos
 export const emailLogs = pgTable("email_logs", {
   id: serial("id").primaryKey(),
-  paymentId: serial("payment_id").references(() => payments.id),
-  studentId: serial("student_id").references(() => students.id),
+  paymentId: integer("payment_id").references(() => payments.id),
+  studentId: integer("student_id").references(() => students.id),
   debtId: integer("debt_id"),
   conceptName: text("concept_name"),
   dueDate: date("due_date"),

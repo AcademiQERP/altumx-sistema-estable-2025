@@ -486,7 +486,7 @@ ${schoolName}
         // Registrar el envío exitoso
         await storage.createEmailLog({
           studentId: debt.studentId,
-          paymentId: 0,
+          paymentId: null,
           debtId: debt.id,
           conceptName: debt.conceptName,
           dueDate: new Date(debt.fechaLimite),
@@ -532,7 +532,7 @@ ${schoolName}
         try {
           await storage.createEmailLog({
             studentId: debt.studentId,
-            paymentId: 0,
+            paymentId: null,
             debtId: debt.id,
             conceptName: debt.conceptName,
             dueDate: new Date(debt.fechaLimite),
