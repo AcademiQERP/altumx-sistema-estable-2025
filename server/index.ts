@@ -149,6 +149,12 @@ app.post('/test-ai-predict', async (req, res) => {
   // Luego registrar las rutas normales
   const server = await registerRoutes(app);
 
+  // Ruta base para confirmar que el servidor está activo
+app.get("/", (_req, res) => {
+  res.send("✅ AcademiQ ERP está corriendo correctamente.");
+});
+feat: Ruta raíz `/` agregada para evitar error 404 en Railway
+  
   // Middleware para manejar rutas API inexistentes y responder con JSON en lugar de HTML
   app.use('/api/*', (req: Request, res: Response) => {
     console.log(`[404] Ruta API no encontrada: ${req.originalUrl}`);
